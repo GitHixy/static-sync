@@ -1,0 +1,6 @@
+{
+    "scripts": {
+      "start": "concurrently \"cd backend && node app.js\" \"cd frontend && npx react-native run-android\""
+    }
+  }
+  
