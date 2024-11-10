@@ -1,32 +1,26 @@
 const express = require('express');
 const axios = require('axios');
-const { getFFLogsSdk } = require('../utils/authFFLogs');
-
 const router = express.Router();
 
-// Endpoint per ottenere i dati di un personaggio
-router.get('/character/:name/:serverSlug/:serverRegion', async (req, res) => {
+// Endpoint per ottenere i parse del personaggio
+router.get('/character/:name/:server/:region', async (req, res) => {
     try {
-        const { name, serverSlug, serverRegion } = req.params;
-
-        // Ottieni l'istanza SDK inizializzata con il token
-        const ffSdk = await getFFLogsSdk();
-
-        // Utilizza il metodo getCharacter dell'SDK per ottenere i dati del personaggio
-        const response = await ffSdk.getCharacter({
-            characterName: name,
-            serverSlug: serverSlug,
-            serverRegion: serverRegion,
-            includeServer: true
+        const { name, server, region } = req.params;
+        
+        const response = await axios.get(`https://www.fflogs.com/v1/parses/character/${name}/${server}/${region}`, {
+            params: {
+                api_key: process.env.FF_LOGS_API_KEY
+            }
         });
 
-        // Rispondi con i dati del personaggio
-        res.json(response.characterData.character);
+        // Inverte l'ordine dei dati dei parses
+        const reversedData = response.data.reverse();
+
+        res.json(reversedData);
     } catch (error) {
         console.error('Error fetching character data:', error.response?.data || error.message);
         res.status(500).json({ message: 'Failed to fetch character data' });
     }
 });
-
 
 module.exports = router;
