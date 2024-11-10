@@ -5,21 +5,34 @@ async function fetchCharacterDataV2(name, serverSlug, serverRegion) {
     const accessToken = await getFFLogsToken();
 
     const query = `
-        query($name: String, $serverSlug: String, $serverRegion: String) {
-            characterData {
-                character(name: $name, serverSlug: $serverSlug, serverRegion: $serverRegion) {
-                    canonicalID
+    query($name: String, $serverSlug: String, $serverRegion: String) {
+        characterData {
+            character(name: $name, serverSlug: $serverSlug, serverRegion: $serverRegion) {
+                canonicalID,
+                name,
+                lodestoneID,
+                id,
+                guildRank,
+                guilds {
+                    id,
                     name
-                    lodestoneID
-                    id  
-                    guilds {
-                        id
-                        name
-                    }           
                 }
+            bestHPSRankings: zoneRankings(
+                byBracket: true,
+                includePrivateLogs: true,
+                metric: hps
+            )
+            bestDPSRankings: zoneRankings(
+                byBracket: true,
+                includePrivateLogs: true,
+                metric: dps
+            ) 
             }
         }
-    `;
+    }
+`;
+
+
 
     const variables = {
         name,
