@@ -222,8 +222,7 @@ http://localhost:5000/api
         "regionRank": 422,
         "serverRank": 38,
         "totalKills": 10
-      },
-      ...
+      }
     ]
   }
   ```
@@ -232,12 +231,15 @@ http://localhost:5000/api
 
 ### Notes
 
-- **Tokens**: Ensure all requests requiring authentication are sent with a valid token in the headers.
+- **Tokens**: To ensure connection to db and all requests requiring authentication are sent with a valid token in the headers.
 - **Environment Variables**: `.env` file should contain:
   ```env
   FF_LOGS_CLIENT_ID=your_client_id
   FF_LOGS_CLIENT_SECRET=your_client_secret
   FF_LOGS_API_KEY=your_v1_api_key
+  MONGO_URI=your_db_url
+  JWT_SECRET=your_JWT_secret_key
+  PORT=your_port
   ```
 
 ---
