@@ -11,7 +11,11 @@ async function fetchCharacterDataV2(name, serverSlug, serverRegion) {
                     canonicalID
                     name
                     lodestoneID
-                    id             
+                    id  
+                    guilds {
+                        id
+                        name
+                    }           
                 }
             }
         }
