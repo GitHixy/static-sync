@@ -17,16 +17,36 @@ async function fetchCharacterDataV2(name, serverSlug, serverRegion) {
                     id,
                     name
                 }
-            bestHPSRankings: zoneRankings(
-                byBracket: true,
-                includePrivateLogs: true,
-                metric: hps
-            )
-            bestDPSRankings: zoneRankings(
-                byBracket: true,
-                includePrivateLogs: true,
-                metric: dps
-            ) 
+                bestHPSRankingsRaids: zoneRankings(
+                    byBracket: true,
+                    includePrivateLogs: true,
+                    metric: hps
+                )
+                bestDPSRankingsRaids: zoneRankings(
+                    byBracket: true,
+                    includePrivateLogs: true,
+                    metric: dps
+                )
+                bestHPSRankingsEX1: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: hps,
+                    encounterID: 1071
+                )
+                bestDPSRankingsEX1: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: dps,
+                    encounterID: 1071
+                ) 
+                bestHPSRankingsEX2: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: hps,
+                    encounterID: 1072
+                )
+                bestDPSRankingsEX2: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: dps,
+                    encounterID: 1072
+                )
             }
         }
     }
