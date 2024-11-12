@@ -187,6 +187,48 @@ router.get("/character/:name/:serverSlug/:serverRegion", async (req, res) => {
                 ),
             }
           : null,
+        bestHPSRankingsEX3: characterData.data.characterData.character
+          .bestHPSRankingsEX3
+          ? {
+              encounterID: "1078",
+              encounterName: "Queen Eternal",
+              totalKills:
+                characterData.data.characterData.character.bestHPSRankingsEX3
+                  .totalKills,
+              ranks:
+                characterData.data.characterData.character.bestHPSRankingsEX3.ranks.map(
+                  (rank) => ({
+                    rankPercent: rank.rankPercent,
+                    reportID: rank.report.code,
+                    startTime: rank.startTime,
+                    spec: rank.spec,
+                    amount: rank.amount,
+                    totalParses: rank.rankTotalParses,
+                  })
+                ),
+            }
+          : null,
+        bestDPSRankingsEX3: characterData.data.characterData.character
+          .bestDPSRankingsEX3
+          ? {
+              encounterID: "1078",
+              encounterName: "Queen Eternal",
+              totalKills:
+                characterData.data.characterData.character.bestDPSRankingsEX3
+                  .totalKills,
+              ranks:
+                characterData.data.characterData.character.bestDPSRankingsEX3.ranks.map(
+                  (rank) => ({
+                    rankPercent: rank.rankPercent,
+                    reportID: rank.report.code,
+                    startTime: rank.startTime,
+                    spec: rank.spec,
+                    amount: rank.amount,
+                    totalParses: rank.rankTotalParses,
+                  })
+                ),
+            }
+          : null,          
       },
     };
 

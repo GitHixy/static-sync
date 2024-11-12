@@ -4,10 +4,14 @@
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "",
+    "icon": "./assets/StaticSync BaseLogo.png",
+    "extra": {
+      "EXPO_API_URL": "http://192.168.1.62:5000"
+    },
     "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
     "splash": {
-      "image": "",
+      "image": "./assets/StaticSync BaseLogo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,12 +20,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "",
+        "foregroundImage": "./assets/StaticSync BaseLogo.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": ""
+      "favicon": "./assets/StaticSync BaseLogo.png"
     }
   }
 }

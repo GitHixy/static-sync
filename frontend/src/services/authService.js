@@ -1,8 +1,11 @@
 import axios from 'axios';
-url = process.env.EXPO_API_URL
+import Constants from 'expo-constants';
+
+const apiUrl = Constants.expoConfig.extra.EXPO_API_URL;
+
 export const loginUser = async (email, password) => {
   try { 
-    const response = await axios.post(`${url}/api/users/login`, { email, password });
+    const response = await axios.post(`${apiUrl}/api/users/login`, { email, password });
     return response.data;
   } catch (error) {
     throw error;
@@ -11,7 +14,7 @@ export const loginUser = async (email, password) => {
 
 export const registerUser = async (username, email, password) => {
   try {
-    const response = await axios.post(`${url}/api/users/register`, { username, email, password });
+    const response = await axios.post(`${apiUrl}/api/users/register`, { username, email, password });
     return response.data;
   } catch (error) {
     throw error;

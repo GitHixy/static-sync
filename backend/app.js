@@ -6,13 +6,14 @@ const connectDB = require('./config/db');
 //Routes Import
 const userRoutes = require('./routes/userRoutes');
 const staticRoutes = require('./routes/staticRoutes');
-const ffLogsRoutes = require('./routes/ffLogsRoutes'); //Route V2 & V1
+const ffLogsRoutes = require('./routes/ffLogsRoutes');
+const lodestoneRoutes = require('./routes/lodestoneRoutes')
 
 dotenv.config();
 connectDB();
 
 const corsOptions = {
-    origin: '*' ,// Sostituisci con l'URL del frontend, se necessario
+    origin: '*' ,
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/statics', staticRoutes);
 app.use('/api/fflogs', ffLogsRoutes);
+app.use('/api/lodestone', lodestoneRoutes);
 
 
 const PORT = process.env.PORT;

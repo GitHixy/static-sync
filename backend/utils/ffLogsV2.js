@@ -47,6 +47,16 @@ async function fetchCharacterDataV2(name, serverSlug, serverRegion) {
                     metric: dps,
                     encounterID: 1072
                 )
+                bestHPSRankingsEX3: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: hps,
+                    encounterID: 1078
+                )
+                bestDPSRankingsEX3: encounterRankings(
+                    includePrivateLogs: true,
+                    metric: dps,
+                    encounterID: 1078
+                )        
             }
         }
     }
