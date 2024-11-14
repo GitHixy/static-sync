@@ -29,12 +29,12 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.menuText}>Maintenance</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.replace('ServerStatus')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Server Status')}>
             <Ionicons name="server-outline" size={30} color="#fff" />
             <Text style={styles.menuText}>Server Status</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.replace('PlayerSearch')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Search Player')}>
             <Ionicons name="search-outline" size={30} color="#fff" />
             <Text style={styles.menuText}>Player Search</Text>
           </TouchableOpacity>

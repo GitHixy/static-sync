@@ -8,6 +8,7 @@
     "extra": {
       "EXPO_API_URL": "http://192.168.1.62:5000"
     },
+    
     "userInterfaceStyle": "light",
     "assetBundlePatterns": ["**/*"],
     "splash": {
@@ -16,13 +17,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "newArchEnabled": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/StaticSync BaseLogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "newArchEnabled": true
     },
     "web": {
       "favicon": "./assets/StaticSync BaseLogo.png"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ImageBackground, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
 import { fetchMaintenance } from '../services/maintenanceService';
 
 const MaintenanceScreen = () => {
@@ -16,12 +16,12 @@ const MaintenanceScreen = () => {
         const sortedMaintenance = maintenanceData
           .sort((a, b) => new Date(b.time) - new Date(a.time))
           .slice(0, 15);
-        
+
         setMaintenance(sortedMaintenance);
       } catch (error) {
         console.error("Failed to fetch maintenance data", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
@@ -31,8 +31,11 @@ const MaintenanceScreen = () => {
   const renderMaintenanceItem = ({ item }) => (
     <View style={styles.card}>
       <Text style={styles.title}>{item.title}</Text>
-      <Text style={styles.time}>{new Date(item.time).toLocaleString()}</Text>
+      <Text style={styles.time}>Scheduled for: {new Date(item.time).toLocaleString()}</Text>
       <Text style={styles.description}>{item.description}</Text>
+      <TouchableOpacity onPress={() => Linking.openURL(item.url)} style={styles.detailButton}>
+        <Text style={styles.detailButtonText}>View Details</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -40,7 +43,7 @@ const MaintenanceScreen = () => {
     <ImageBackground source={require('../../assets/HomeBG.webp')} style={styles.background}>
       {isLoading ? (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size={50} color="#fff" />
         </View>
       ) : (
         <FlatList
@@ -64,24 +67,42 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 10,
-    padding: 15,
+    padding: 20,
     marginBottom: 15,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
+    marginBottom: 8,
   },
   time: {
     fontSize: 14,
-    color: '#666',
-    marginBottom: 5,
+    color: '#888',
+    marginBottom: 8,
   },
   description: {
     fontSize: 14,
-    color: '#666',
+    color: '#555',
+    marginBottom: 10,
+  },
+  detailButton: {
+    backgroundColor: '#007bff',
+    borderRadius: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+  },
+  detailButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   spinnerContainer: {
     flex: 1,

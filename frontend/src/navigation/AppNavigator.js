@@ -6,6 +6,8 @@ import RegisterScreen from '../screens/RegisterScreen';
 import HomeScreen from '../screens/HomeScreen';
 import NewsScreen from '../screens/NewsScreen';
 import MaintenanceScreen from '../screens/MaintenanceScreen';
+import ServerStatusScreen from '../screens/ServerStatusScreen';
+import SearchPlayerScreen from '../screens/SearchPlayerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +65,27 @@ const AppNavigator = () => {
             fontWeight: 'bold', 
           },
         }}/>
+        <Stack.Screen name="Server Status" component={ServerStatusScreen} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#000', 
+          },
+          headerTintColor: '#fff', 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+          },
+        }} />
+        <Stack.Screen name="Search Player" component={SearchPlayerScreen} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#000', 
+          },
+          headerTintColor: '#fff', 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+          },
+        }} />
+
 
 
       </Stack.Navigator>

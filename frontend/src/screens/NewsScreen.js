@@ -41,7 +41,7 @@ const NewsScreen = () => {
     <ImageBackground source={require('../../assets/HomeBG.webp')} style={styles.background}>
       {isLoading ? (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size={50} color="#fff" />
         </View>
       ) : (
         <FlatList
