@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 
 const memberSchema = new mongoose.Schema({
-    playerId: { type: String, required: true },
-    name: { type: String, required: true },
-    role: { type: String, enum: ['Tank', 'Healer', 'DPS'], required: true },
-    class: { type: String, required: true },
-    isConfirmed: { type: Boolean, default: false }
+    playerId: { type: String, required: true }, 
+    name: { type: String, required: true }, 
+    lodestoneID: { type: String, required: true }, 
+    role: { type: String, enum: ['Tank', 'Healer', 'DPS'], required: true }, 
+    class: { type: String, required: true }, 
+    data: { type: mongoose.Schema.Types.Mixed }, 
 });
+
 
 const staticSchema = new mongoose.Schema({
     owner: {

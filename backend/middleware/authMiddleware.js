@@ -11,12 +11,17 @@ const protect = async (req, res, next) => {
             req.user = await User.findById(decoded.id).select('-password');
             next();
         } catch (error) {
-            res.status(401).json({ message: 'Not authorized, token failed' });
+            if (error.name === 'TokenExpiredError') {
+                res.status(401).json({ message: 'jwt expired' });
+            } else {
+                res.status(401).json({ message: 'Not authorized, token failed' });
+            }
         }
     } else {
         res.status(401).json({ message: 'No token, authorization denied' });
     }
 };
+
 
 const admin = (req, res, next) => {
     if (req.user && req.user.isAdmin) {

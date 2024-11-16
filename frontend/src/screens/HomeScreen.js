@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const HomeScreen = ({ navigation }) => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('refreshToken');
     navigation.replace('Login');
   };
 
@@ -39,7 +40,7 @@ const HomeScreen = ({ navigation }) => {
             <Text style={styles.menuText}>Player Search</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.replace('ManageStatics')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Manage Statics')}>
             <Ionicons name="people-outline" size={30} color="#fff" />
             <Text style={styles.menuText}>Manage Statics</Text>
           </TouchableOpacity>
@@ -64,10 +65,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
+    padding: 10,
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+ 
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,

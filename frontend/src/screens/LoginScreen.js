@@ -24,7 +24,8 @@ const LoginScreen = ({ navigation }) => {
     setIsLoading(true);
     try {
       const userData = await loginUser(email, password);
-      await AsyncStorage.setItem('token', userData.token);
+      await AsyncStorage.setItem('token', userData.accessToken);
+      await AsyncStorage.setItem('refreshToken', userData.refreshToken);
       navigation.replace('Home');
     } catch (error) {
       Alert.alert('Login failed', 'Invalid email or password');
