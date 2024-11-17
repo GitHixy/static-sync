@@ -1,10 +1,11 @@
 const express = require('express');
 const Static = require('../models/Static');
 const User = require('../models/User');
+const {updateData} = require('../utils/ffLogsV2');
 const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Crea un nuovo statico
+
 router.post('/', protect, async (req, res) => {
     const { name, description } = req.body;
 
@@ -30,7 +31,7 @@ router.post('/', protect, async (req, res) => {
     }
 });
 
-// Endpoint per aggiungere un membro allo statico
+
 router.post('/:id/members', protect, async (req, res) => {
     const { playerId, name, lodestoneID, role, playerClass, data } = req.body; 
     
@@ -48,7 +49,7 @@ router.post('/:id/members', protect, async (req, res) => {
 
         
         const existingMember = userStatic.members.find(
-            (member) => member.playerId === characterData.characterInfo.id
+            (member) => member.playerId === playerId
         );
         if (existingMember) {
             return res.status(400).json({ message: 'Player is already in the static.' });
@@ -75,34 +76,138 @@ router.post('/:id/members', protect, async (req, res) => {
 });
 
 
-// Endpoint per ottenere tutti gli statici di un utente
+
 router.get('/', protect, async (req, res) => {
     try {
-        const user = await Static.find({ owner: req.user._id });
-        res.json(user);
+        const userStatics = await Static.find({ owner: req.user._id });
+
+        const staticsWithValidation = userStatics.map(staticItem => ({
+            ...staticItem.toObject(),
+            isValidComposition: staticItem.validateComposition(),
+        }));
+
+        res.json(staticsWithValidation);
     } catch (error) {
+        console.error('Error fetching statics:', error.message);
         res.status(500).json({ message: 'Error fetching statics' });
     }
 });
 
-// Endpoint per confermare lo statico
-router.post('/:id/confirm', protect, async (req, res) => {
+router.get('/:id', protect, async (req, res) => {
     try {
-        const userStatic = await Static.findOne({ _id: req.params.id, owner: req.user._id });
+        const staticItem = await Static.findOne({ _id: req.params.id, owner: req.user._id });
+
+        if (!staticItem) {
+            return res.status(404).json({ message: 'Static not found' });
+        }
+
+        const staticWithValidation = {
+            ...staticItem.toObject(),
+            isValidComposition: staticItem.validateComposition(),
+        };
+
+        res.json(staticWithValidation);
+    } catch (error) {
+        console.error('Error fetching static:', error.message);
+        res.status(500).json({ message: 'Error fetching static' });
+    }
+});
+
+router.put("/:staticId/update-members", protect, async (req, res) => {
+    const { staticId } = req.params || req.body;
+  
+    try {
+      
+      const staticData = await Static.findById(staticId);
+    
+      if (!staticData) {
+        return res.status(404).json({ message: "Static not found" });
+      }
+  
+      
+      const updatedMembers = await Promise.all(
+        staticData.members.map(async (member) => {
+          try {
+            
+            const characterData = await updateData(parseInt(member.playerId));
+            const character = characterData.data.characterData?.character; 
+            
+  
+            if (!character) {
+              console.warn(
+                `No character data found for member ID: ${member.playerId}`
+              );
+              return member; 
+            }
+  
+            
+            const updatedMember = {
+              ...member.toObject(), 
+              data: {
+                id: character.id,
+                name: character.name,
+                lodestoneID: character.lodestoneID,
+                guildRank: character.guildRank,
+                guilds: character.guilds,
+                Raids: {
+                  bestHPSRankings: character.bestHPSRankingsRaids,
+                  bestDPSRankings: character.bestDPSRankingsRaids,
+                },
+                Trials: {
+                  bestHPSRankingsEX1: character.bestHPSRankingsEX1,
+                  bestDPSRankingsEX1: character.bestDPSRankingsEX1,
+                  bestHPSRankingsEX2: character.bestHPSRankingsEX2,
+                  bestDPSRankingsEX2: character.bestDPSRankingsEX2,
+                  bestHPSRankingsEX3: character.bestHPSRankingsEX3,
+                  bestDPSRankingsEX3: character.bestDPSRankingsEX3,
+                },
+              },
+            };
+  
+            return updatedMember;
+          } catch (error) {
+            console.error(
+              `Error fetching data for member ID: ${member.playerId}`,
+              error.message
+            );
+            return member; 
+          }
+        })
+      );
+  
+      
+      staticData.members = updatedMembers;
+  
+      
+      await staticData.save();
+  
+      res.status(200).json({ message: "Members updated successfully", staticData });
+    } catch (error) {
+      console.error("Error updating static members:", error.message);
+      res.status(500).json({ message: "Failed to update static members" });
+    }
+  });
+
+router.delete('/:id', protect, async (req, res) => {
+    try {
+
+        const userStatic = await Static.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
 
         if (!userStatic) {
             return res.status(404).json({ message: 'Static not found' });
         }
 
-        if (userStatic.validateComposition()) {
-            userStatic.isComplete = true;
-            await userStatic.save();
-            res.json({ message: 'Static is complete and confirmed!' });
-        } else {
-            res.status(400).json({ message: 'The static does not have the correct composition of roles.' });
+
+        const user = await User.findById(req.user._id);
+        if (user) {
+            user.statics = user.statics.filter(staticEntry => !staticEntry.staticId.equals(req.params.id));
+            await user.save();
         }
+
+        res.json({ message: 'Static successfully deleted' });
     } catch (error) {
-        res.status(500).json({ message: 'Error confirming the static' });
+        console.error('Error deleting static:', error.message);
+        res.status(500).json({ message: 'Error deleting static' });
     }
 });
 

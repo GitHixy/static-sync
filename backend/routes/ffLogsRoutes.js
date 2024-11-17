@@ -1,7 +1,8 @@
 const express = require("express");
 const NodeCache = require("node-cache");
-const { fetchCharacterDataV2 } = require("../utils/ffLogsV2");
+const { fetchCharacterDataV2, updateData } = require("../utils/ffLogsV2");
 const { fetchCharacterParsesV1 } = require("../utils/ffLogsV1");
+const Static = require('../models/Static');
 const router = express.Router();
 
 const cache = new NodeCache({ stdTTL: 900 }); // TTL 15 Minuti
@@ -69,9 +70,9 @@ router.get("/character/:name/:serverSlug/:serverRegion", async (req, res) => {
                     encounterID: ranking.encounter.id,
                     encounterName: ranking.encounter.name,
                     rank: ranking.rank,
-                    rankPercent: ranking.rankPercent,
-                    serverRank: ranking.allStars.serverRank,
-                    regionRank: ranking.allStars.regionRank,
+                    rankPercent: ranking?.rankPercent ?? 'N/A',
+                    serverRank: ranking.allStars?.serverRank ?? 'N/A',
+                    regionRank: ranking.allStars?.regionRank ?? 'N/A',
                     totalKills: ranking.totalKills,
                     bestAmount: ranking.bestAmount,
                     spec: ranking.spec,
@@ -91,9 +92,9 @@ router.get("/character/:name/:serverSlug/:serverRegion", async (req, res) => {
                     encounterID: ranking.encounter.id,
                     encounterName: ranking.encounter.name,
                     rank: ranking.rank,
-                    rankPercent: ranking.rankPercent,
-                    serverRank: ranking.allStars.serverRank,
-                    regionRank: ranking.allStars.regionRank,
+                    rankPercent: ranking?.rankPercent ?? 'N/A',
+                    serverRank: ranking.allStars?.serverRank ?? 'N/A',
+                    regionRank: ranking.allStars?.regionRank ?? 'N/A',
                     totalKills: ranking.totalKills,
                     bestAmount: ranking.bestAmount,
                     spec: ranking.spec,
@@ -244,5 +245,7 @@ router.get("/character/:name/:serverSlug/:serverRegion", async (req, res) => {
     res.status(500).json({ message: "Failed to fetch character data" });
   }
 });
+
+
 
 module.exports = router;

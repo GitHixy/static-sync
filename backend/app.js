@@ -16,7 +16,7 @@ connectDB();
 
 const corsOptions = {
     origin: '*' ,
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 };
 

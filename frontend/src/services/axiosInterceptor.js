@@ -19,7 +19,6 @@ api.interceptors.response.use(
 
         console.log('Interceptor triggered:', error.response?.status, error.response?.data);
 
-        // Verifica se l'errore è un 401 e contiene 'jwt expired'
         if (
             error.response &&
             error.response.status === 401 &&

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -9,15 +10,20 @@ import {
   FlatList,
   ImageBackground,
   ScrollView,
-} from 'react-native';
-import { createStatic, fetchStatics } from '../services/staticService';
+} from "react-native";
+import {
+  createStatic,
+  fetchStatics,
+  deleteStatic,
+} from "../services/staticService";
 
 const ManageStaticScreen = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statics, setStatics] = useState([]);
 
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadStatics();
@@ -29,7 +35,7 @@ const ManageStaticScreen = () => {
       const fetchedStatics = await fetchStatics();
       setStatics(fetchedStatics);
     } catch (error) {
-      console.error('Error fetching statics:', error.message);
+      console.error("Error fetching statics:", error.message);
     } finally {
       setIsLoading(false);
     }
@@ -37,32 +43,48 @@ const ManageStaticScreen = () => {
 
   const handleCreateStatic = async () => {
     if (!name) {
-      alert('Please enter a name for your static.');
+      alert("Please enter a name for your static.");
       return;
     }
 
     setIsLoading(true);
     try {
       await createStatic(name, description);
-      setName('');
-      setDescription('');
-      await loadStatics(); 
-      alert('Static created successfully!');
+      setName("");
+      setDescription("");
+      await loadStatics();
+      alert("Static created successfully!");
     } catch (error) {
-      console.error('Error creating static:', error.message);
-      alert('Failed to create static.');
+      console.error("Error creating static:", error.message);
+      alert("Failed to create static.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const confirmDeleteStatic = async (staticItem) => {
+    const userConfirmed = window.confirm(
+      `Are you sure you want to delete the static "${staticItem.name}"?`
+    );
+
+    if (userConfirmed) {
+      try {
+        await deleteStatic(staticItem._id);
+        await loadStatics(); //
+        alert("Static deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting static:", error.message);
+        alert("Failed to delete static.");
+      }
+    }
+  };
+
   return (
     <ImageBackground
-      source={require('../../assets/HomeBG.webp')}
+      source={require("../../assets/HomeBG.webp")}
       style={styles.background}
     >
       <ScrollView contentContainerStyle={styles.container}>
-        
         <View style={styles.form}>
           <Text style={styles.title}>Create a Static</Text>
           <TextInput
@@ -79,12 +101,14 @@ const ManageStaticScreen = () => {
             value={description}
             onChangeText={setDescription}
           />
-          <TouchableOpacity style={styles.createButton} onPress={handleCreateStatic}>
+          <TouchableOpacity
+            style={styles.createButton}
+            onPress={handleCreateStatic}
+          >
             <Text style={styles.createButtonText}>Create</Text>
           </TouchableOpacity>
         </View>
 
-       
         {isLoading ? (
           <ActivityIndicator size={50} color="#fff" style={styles.spinner} />
         ) : (
@@ -95,11 +119,32 @@ const ManageStaticScreen = () => {
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
                 <View style={styles.card}>
-                  <Text style={styles.cardTitle}>{item.name}</Text>
-                  <Text style={styles.cardDescription}>{item.description || 'No description provided.'}</Text>
-                  <Text style={styles.cardDetails}>
-                    Members: {item.members.length} / 8 | {item.isComplete ? 'Complete' : 'Incomplete'}
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.cardTitle}>{item.name}</Text>
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() => confirmDeleteStatic(item)}
+                    >
+                      <Text style={styles.deleteButtonText}>X</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.cardDescription}>
+                    {item.description || "No description provided."}
                   </Text>
+                  <Text style={styles.cardDetails}>
+                    Members: {item.members.length} / 8 |{" "}
+                    {item.isValidComposition ? "Complete" : "Incomplete"}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.detailsButton}
+                    onPress={() => {
+                      navigation.navigate("Static Details", {
+                        staticId: item._id,
+                      });
+                    }}
+                  >
+                    <Text style={styles.detailsButtonText}>Roster Details</Text>
+                  </TouchableOpacity>
                 </View>
               )}
             />
@@ -113,103 +158,143 @@ const ManageStaticScreen = () => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover',
-    width: '100%',
-    height: '100%',
+    resizeMode: "cover",
+    width: "100%",
+    height: "100%",
     padding: 10,
   },
   container: {
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   form: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', 
-    borderRadius: 15, 
-    padding: 25, 
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    borderRadius: 15,
+    padding: 25,
     marginBottom: 30,
-    width: '90%',
-    shadowColor: '#000', 
+    width: "90%",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 20,
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    letterSpacing: 1, 
+    textAlign: "center",
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)', 
-    borderRadius: 10, 
-    padding: 12, 
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    borderRadius: 10,
+    padding: 12,
     marginBottom: 15,
-    color: '#333',
+    color: "#333",
     borderWidth: 1,
-    borderColor: '#ddd',
-    fontSize: 16, 
+    borderColor: "#ddd",
+    fontSize: 16,
   },
   createButton: {
-    backgroundColor: '#28a745', 
+    backgroundColor: "#28a745",
     paddingVertical: 12,
     borderRadius: 10,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
   createButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 15,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
   spinner: {
     marginTop: 20,
   },
   staticList: {
-    width: '90%',
+    width: "90%",
   },
   sectionTitle: {
     fontSize: 20,
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 15,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 15,
-    textAlign: 'center',
-    textTransform: 'uppercase',
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   card: {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     borderRadius: 15,
     padding: 20,
     marginBottom: 15,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
   },
   cardTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
     marginBottom: 10,
   },
   cardDescription: {
     fontSize: 16,
-    color: '#ddd',
+    color: "#ddd",
     marginBottom: 15,
   },
   cardDetails: {
     fontSize: 14,
-    color: '#bbb',
+    color: "#bbb",
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  deleteButton: {
+    backgroundColor: "#dc3545",
+    borderRadius: 15,
+    padding: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 30,
+    height: 30,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  detailsButton: {
+    backgroundColor: "#007bff",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignItems: "center",
+    marginTop: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  detailsButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
 });
-
 
 export default ManageStaticScreen;

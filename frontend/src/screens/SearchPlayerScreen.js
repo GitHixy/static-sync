@@ -22,6 +22,7 @@ const SearchPlayerScreen = () => {
   const [characterData, setCharacterData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  console.log(characterData);
 
   const [role, setRole] = useState("");
   const [classOptions, setClassOptions] = useState([]);
@@ -30,11 +31,17 @@ const SearchPlayerScreen = () => {
   const [selectedStatic, setSelectedStatic] = useState("");
 
   const formatNumber = (number) => {
+    if (typeof number !== "number" || isNaN(number)) {
+      return "N/A"; 
+    }
+  
     if (number >= 1000) {
       return (number / 1000).toFixed(2) + "k";
     }
+  
     return number.toFixed(2);
   };
+  
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -61,7 +68,7 @@ const SearchPlayerScreen = () => {
 
   const openAddModal = async () => {
     try {
-      const fetchedStatics = await fetchStatics(); // Fetch the statics
+      const fetchedStatics = await fetchStatics(); 
       setStatics(fetchedStatics);
       setModalVisible(true);
     } catch (error) {
@@ -186,7 +193,7 @@ const SearchPlayerScreen = () => {
         </View>
 
         {isLoading ? (
-          <ActivityIndicator size="large" color="#fff" style={styles.spinner} />
+          <ActivityIndicator size={50} color="#fff" style={styles.spinner} />
         ) : characterData ? (
           <View style={styles.results}>
             <Text style={styles.resultTitle}>
@@ -203,12 +210,14 @@ const SearchPlayerScreen = () => {
               View on Lodestone
             </Text>
             <Text style={styles.resultText}>
-              Guild:{" "}
-              {characterData.characterInfo.guilds.map((g) => g.name).join(", ")}
-            </Text>
-            <Text style={styles.resultText}>
-              Guild Rank: {characterData.characterInfo.guildRank}
-            </Text>
+  Guild:{" "}
+  {characterData.characterInfo.guilds && characterData.characterInfo.guilds.length > 0
+    ? characterData.characterInfo.guilds.map((g) => g.name).join(", ")
+    : "N/A"}
+</Text>
+<Text style={styles.resultText}>
+  Guild Rank: {characterData.characterInfo.guildRank || "N/A"}
+</Text>
 
             {/* Add Member Button */}
             <TouchableOpacity style={styles.addButton} onPress={openAddModal}>
@@ -237,7 +246,7 @@ const SearchPlayerScreen = () => {
                       {ranking.encounterName} - {ranking.spec}
                     </Text>
                     <Text style={styles.rankDetails}>
-                      Rank Percent: {ranking.rankPercent.toFixed(2)}%
+                    Rank Percent: {formatNumber(ranking.rankPercent)}
                     </Text>
                     <Text style={styles.rankDetails}>
                       Best Amount: {formatNumber(ranking.bestAmount)}
@@ -266,7 +275,7 @@ const SearchPlayerScreen = () => {
                       {ranking.encounterName} - {ranking.spec}
                     </Text>
                     <Text style={styles.rankDetails}>
-                      Rank Percent: {ranking.rankPercent.toFixed(2)}%
+                    Rank Percent: {formatNumber(ranking.rankPercent)}
                     </Text>
                     <Text style={styles.rankDetails}>
                       Best Amount: {formatNumber(ranking.bestAmount)}

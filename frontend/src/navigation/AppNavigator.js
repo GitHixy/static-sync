@@ -9,12 +9,29 @@ import MaintenanceScreen from '../screens/MaintenanceScreen';
 import ServerStatusScreen from '../screens/ServerStatusScreen';
 import SearchPlayerScreen from '../screens/SearchPlayerScreen';
 import ManageStaticScreen from '../screens/ManageStaticScreen';
+import StaticDetailsScreen from '../screens/StaticDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer 
+    linking={{
+      prefixes: ['http://localhost:8081'],
+      config: {
+        screens: {
+          Login: 'login',
+          Register: 'register',
+          Home: 'home',
+          News: 'news',
+          Maintenance: 'maintenance',
+          ServerStatus: 'server-status',
+          SearchPlayer: 'search-player',
+          ManageStatics: '/',
+          StaticDetails: 'static-details/:staticId',
+        },
+      },
+    }}>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} 
         options={{
@@ -87,6 +104,16 @@ const AppNavigator = () => {
           },
         }} />
         <Stack.Screen name="Manage Statics" component={ManageStaticScreen} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#000', 
+          },
+          headerTintColor: '#fff', 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+          },
+        }} />
+        <Stack.Screen name="Static Details" component={StaticDetailsScreen} 
         options={{
           headerStyle: {
             backgroundColor: '#000', 
