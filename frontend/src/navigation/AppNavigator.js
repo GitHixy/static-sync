@@ -10,6 +10,7 @@ import ServerStatusScreen from '../screens/ServerStatusScreen';
 import SearchPlayerScreen from '../screens/SearchPlayerScreen';
 import ManageStaticScreen from '../screens/ManageStaticScreen';
 import StaticDetailsScreen from '../screens/StaticDetailsScreen';
+import PluginsScreen from '../screens/PluginsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,7 @@ const AppNavigator = () => {
           SearchPlayer: 'search-player',
           ManageStatics: '/',
           StaticDetails: 'static-details/:staticId',
+          Plugins: 'Plugins',
         },
       },
     }}>
@@ -114,6 +116,16 @@ const AppNavigator = () => {
           },
         }} />
         <Stack.Screen name="Static Details" component={StaticDetailsScreen} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#000', 
+          },
+          headerTintColor: '#fff', 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+          },
+        }} />
+        <Stack.Screen name="Plugins" component={PluginsScreen} 
         options={{
           headerStyle: {
             backgroundColor: '#000', 

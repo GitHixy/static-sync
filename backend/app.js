@@ -10,6 +10,7 @@ const staticRoutes = require('./routes/staticRoutes');
 const ffLogsRoutes = require('./routes/ffLogsRoutes');
 const lodestoneRoutes = require('./routes/lodestoneRoutes')
 const serverStatusRoutes = require('./routes/serverStatusRoutes');
+const pluginsRoutes = require('./routes/pluginsRoutes');
 
 dotenv.config();
 connectDB();
@@ -33,6 +34,7 @@ app.use('/api/statics', staticRoutes);
 app.use('/api/fflogs', ffLogsRoutes);
 app.use('/api/lodestone', lodestoneRoutes);
 app.use('/api', serverStatusRoutes);
+app.use('/api', pluginsRoutes);
 
 
 const PORT = process.env.PORT;

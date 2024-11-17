@@ -49,6 +49,10 @@ const HomeScreen = ({ navigation }) => {
             <Ionicons name="calendar" size={30} color="#fff" />
             <Text style={styles.menuText}>Calendar</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Plugins')}>
+            <Ionicons name="code-working" size={30} color="#fff" />
+            <Text style={styles.menuText}>Plugins</Text>
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>

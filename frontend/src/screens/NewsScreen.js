@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, FlatList, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ImageBackground, FlatList, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Linking } from 'react-native';
 import { fetchNews } from '../services/newsService';
 
 const NewsScreen = () => {
@@ -26,11 +26,13 @@ const NewsScreen = () => {
 
   const renderNewsItem = ({ item }) => (
     <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.newsImage} />
+      <View style={styles.imageContainer}>
+        <Image source={{ uri: item.image }} style={styles.newsImage} />
+      </View>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description} numberOfLines={3}>{item.description}</Text>
-        <TouchableOpacity style={styles.readMore} onPress={() => console.log("Apri URL notizia", item.url)}>
+        <TouchableOpacity style={styles.readMore} onPress={() => Linking.openURL(item.url)}  >
           <Text style={styles.readMoreText}>Read more</Text>
         </TouchableOpacity>
       </View>
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 10,
+    padding: 40,
   },
   listContainer: {
     paddingTop: 20,
@@ -76,10 +78,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
   },
+  imageContainer: {
+    width: '100%',
+    aspectRatio: 16 / 9, 
+    backgroundColor: '#ddd',
+  },
   newsImage: {
     width: '100%',
-    height: 150,
-    resizeMode: 'contain',
+    height: '100%',
+    resizeMode: 'contain', 
   },
   textContainer: {
     padding: 15,
@@ -110,5 +117,6 @@ const styles = StyleSheet.create({
 });
 
 export default NewsScreen;
+
 
 

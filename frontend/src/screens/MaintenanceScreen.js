@@ -12,10 +12,9 @@ const MaintenanceScreen = () => {
         setIsLoading(true);
         const maintenanceData = await fetchMaintenance();
 
-        
         const sortedMaintenance = maintenanceData
           .sort((a, b) => new Date(b.time) - new Date(a.time))
-          .slice(0, 15);
+          .slice(0, 16);
 
         setMaintenance(sortedMaintenance);
       } catch (error) {
@@ -33,9 +32,11 @@ const MaintenanceScreen = () => {
       <Text style={styles.title}>{item.title}</Text>
       <Text style={styles.time}>Scheduled for: {new Date(item.time).toLocaleString()}</Text>
       <Text style={styles.description}>{item.description}</Text>
-      <TouchableOpacity onPress={() => Linking.openURL(item.url)} style={styles.detailButton}>
-        <Text style={styles.detailButtonText}>View Details</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => Linking.openURL(item.url)} style={styles.detailButton}>
+          <Text style={styles.detailButtonText}>View Details</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -51,6 +52,7 @@ const MaintenanceScreen = () => {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderMaintenanceItem}
           contentContainerStyle={styles.listContainer}
+          numColumns={2} 
         />
       )}
     </ImageBackground>
@@ -63,20 +65,23 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 10,
+    padding: 20,
   },
   listContainer: {
     paddingTop: 20,
   },
   card: {
+    flex: 1,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 10,
     padding: 20,
-    marginBottom: 15,
+    margin: 10,
     elevation: 3,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 5,
+    display: 'flex',
+    justifyContent: 'space-between', 
   },
   title: {
     fontSize: 18,
@@ -93,6 +98,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginBottom: 10,
+    flexGrow: 1, 
+  },
+  buttonContainer: {
+    alignSelf: 'flex-start',
   },
   detailButton: {
     backgroundColor: '#007bff',
@@ -114,5 +123,6 @@ const styles = StyleSheet.create({
 });
 
 export default MaintenanceScreen;
+
 
 
