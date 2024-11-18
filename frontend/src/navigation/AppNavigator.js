@@ -18,7 +18,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer 
     linking={{
-      prefixes: ['http://192.168.1.60:8081'],
+      prefixes: ['http://192.168.1.60:8081', 'https://static-sync-7mzv.onrender.com'],
       config: {
         screens: {
           Login: 'login',
