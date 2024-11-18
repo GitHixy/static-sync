@@ -123,6 +123,7 @@ if (lastUpdated && now - lastUpdated < 15 * 60 * 1000) {
 
 
     return (
+      <ScrollView horizontal style={styles.scrollContainer}>
       <View style={styles.rankingsTable}>
         <View style={styles.tableHeader}>
           <Text style={styles.tableHeaderText}>Encounter</Text>
@@ -175,6 +176,7 @@ if (lastUpdated && now - lastUpdated < 15 * 60 * 1000) {
           );
         })}
       </View>
+      </ScrollView>
     );
   }; 
 
@@ -210,7 +212,7 @@ if (lastUpdated && now - lastUpdated < 15 * 60 * 1000) {
       style={styles.background}
     >
       <View style={styles.header}>
-        <Text style={styles.title}>Static Name: {staticDetails.name}</Text>
+        <Text style={styles.title}>{staticDetails.name}</Text>
         <TouchableOpacity onPress={handleUpdateData}>
           <Text style={styles.updateText}>Update Data</Text>
         </TouchableOpacity>
@@ -258,6 +260,9 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
+  },
+  scrollContainer: {
+    marginBottom: 20,
   },
   updateText: {
     fontSize: 16,

@@ -185,7 +185,7 @@ const ManageStaticScreen = () => {
                       }}
                     >
                       <Text style={styles.copyButton}>
-                        {copied ? "Copied!" : "Copy ID"}
+                        {copied ? " Copied!" : " Copy ID"}
                       </Text>
                     </TouchableOpacity>
                   </Text>
@@ -242,10 +242,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   copyButton: {
-    fontSize: 14,
+    fontSize: 12,
     color: "#007bff",
     fontWeight: "bold",
-    marginLeft: 5,
+    
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
