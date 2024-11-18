@@ -75,11 +75,56 @@ router.post('/:id/members', protect, async (req, res) => {
     }
 });
 
+router.put('/:id/add', protect, async (req, res) => {
+  const { id: staticId } = req.params;
 
+  try {
+      
+      const staticItem = await Static.findById(staticId);
+      if (!staticItem) {
+          return res.status(404).json({ message: 'Static not found' });
+      }
+
+      
+      const user = await User.findById(req.user._id);
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      
+      if (user.statics.some(staticEntry => staticEntry.staticId.equals(staticId))) {
+          return res.status(400).json({ message: 'Static already added to your account' });
+      }
+
+      
+      user.statics.push({ staticId: staticItem._id, name: staticItem.name });
+      await user.save();
+
+      res.status(200).json({
+          message: 'Static successfully added to your account',
+          static: {
+              id: staticItem._id,
+              name: staticItem.name,
+              description: staticItem.description,
+          },
+      });
+  } catch (error) {
+      console.error('Error adding existing static:', error.message);
+      res.status(500).json({ message: 'Error adding existing static' });
+  }
+});
 
 router.get('/', protect, async (req, res) => {
     try {
-        const userStatics = await Static.find({ owner: req.user._id });
+        const user = await User.findById(req.user._id).populate('statics.staticId');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const userStaticIds = user.statics.map(staticEntry => staticEntry.staticId);
+
+        const userStatics = await Static.find({ _id: { $in: userStaticIds } });
 
         const staticsWithValidation = userStatics.map(staticItem => ({
             ...staticItem.toObject(),
@@ -95,7 +140,21 @@ router.get('/', protect, async (req, res) => {
 
 router.get('/:id', protect, async (req, res) => {
     try {
-        const staticItem = await Static.findOne({ _id: req.params.id, owner: req.user._id });
+        const user = await User.findById(req.user._id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isStaticAssociated = user.statics.some(staticEntry =>
+            staticEntry.staticId.equals(req.params.id)
+        );
+
+        if (!isStaticAssociated) {
+            return res.status(403).json({ message: 'Access denied to this static' });
+        }
+
+        const staticItem = await Static.findById(req.params.id);
 
         if (!staticItem) {
             return res.status(404).json({ message: 'Static not found' });
@@ -188,14 +247,23 @@ router.put("/:staticId/update-members", protect, async (req, res) => {
     }
   });
 
-router.delete('/:id', protect, async (req, res) => {
+  router.delete('/:id', protect, async (req, res) => {
     try {
 
-        const userStatic = await Static.findOneAndDelete({ _id: req.params.id, owner: req.user._id });
+        const userStatic = await Static.findById(req.params.id);
+
 
         if (!userStatic) {
             return res.status(404).json({ message: 'Static not found' });
         }
+
+
+        if (!userStatic.owner.equals(req.user._id)) {
+            return res.status(403).json({ message: 'Only the owner can delete this static' });
+        }
+
+
+        await userStatic.deleteOne();
 
 
         const user = await User.findById(req.user._id);
@@ -210,5 +278,6 @@ router.delete('/:id', protect, async (req, res) => {
         res.status(500).json({ message: 'Error deleting static' });
     }
 });
+
 
 module.exports = router;

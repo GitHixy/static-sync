@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { useNavigation } from "@react-navigation/native";
 import {
   View,
@@ -15,6 +16,7 @@ import {
   createStatic,
   fetchStatics,
   deleteStatic,
+  addExistingStatic
 } from "../services/staticService";
 
 const ManageStaticScreen = () => {
@@ -22,6 +24,8 @@ const ManageStaticScreen = () => {
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [statics, setStatics] = useState([]);
+  const [staticId, setStaticId] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const navigation = useNavigation();
 
@@ -61,7 +65,23 @@ const ManageStaticScreen = () => {
       setIsLoading(false);
     }
   };
-
+  const handleAddStatic = async () => {
+    if (!staticId) {
+      alert("Please enter a Static ID");
+      return;
+    }
+  
+    try {
+      const response = await addExistingStatic(staticId); 
+      alert("Static added successfully!");
+      setStaticId('')
+      await loadStatics();
+    } catch (error) {
+      console.error("Failed to add static:", error);
+      alert("Failed to add static. Please try again.");
+    }
+  };
+  
   const confirmDeleteStatic = async (staticItem) => {
     const userConfirmed = window.confirm(
       `Are you sure you want to delete the static "${staticItem.name}"?`
@@ -70,11 +90,14 @@ const ManageStaticScreen = () => {
     if (userConfirmed) {
       try {
         await deleteStatic(staticItem._id);
-        await loadStatics(); //
+        await loadStatics(); 
         alert("Static deleted successfully!");
       } catch (error) {
-        console.error("Error deleting static:", error.message);
-        alert("Failed to delete static.");
+        if (error.message === 'You are not the owner of this static and cannot delete it.') {
+          alert('You do not have permission to delete this static. Only the owner can delete it.');
+        } else {
+          alert('Failed to delete static. Please try again.');
+        }
       }
     }
   };
@@ -109,6 +132,23 @@ const ManageStaticScreen = () => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.form}>
+          <Text style={styles.title}>Add an Existing Static</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Static ID"
+            placeholderTextColor="#888"
+            value={staticId}
+            onChangeText={setStaticId}
+          />
+          <TouchableOpacity
+            style={styles.createButton}
+            onPress={handleAddStatic}
+          >
+            <Text style={styles.createButtonText}>Add Static</Text>
+          </TouchableOpacity>
+        </View>
+
         {isLoading ? (
           <ActivityIndicator size={50} color="#fff" style={styles.spinner} />
         ) : (
@@ -132,8 +172,22 @@ const ManageStaticScreen = () => {
                     {item.description || "No description provided."}
                   </Text>
                   <Text style={styles.cardDetails}>
-                    Members: {item.members.length} / 8 |{" "}
+                    Members: {item.members.length} / 8 |{" Roster is "}
                     {item.isValidComposition ? "Complete" : "Incomplete"}
+                  </Text>
+                  <Text style={styles.cardDetails}>
+                    Static ID: {item._id}
+                    <TouchableOpacity
+                      onPress={() => {
+                        Clipboard.setString(item._id);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 4000);
+                      }}
+                    >
+                      <Text style={styles.copyButton}>
+                        {copied ? "Copied!" : "Copy ID"}
+                      </Text>
+                    </TouchableOpacity>
                   </Text>
                   <TouchableOpacity
                     style={styles.detailsButton}
@@ -186,6 +240,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textTransform: "uppercase",
     letterSpacing: 1,
+  },
+  copyButton: {
+    fontSize: 14,
+    color: "#007bff",
+    fontWeight: "bold",
+    marginLeft: 5,
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",

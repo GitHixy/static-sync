@@ -111,9 +111,29 @@ export const deleteStatic = async (staticId) => {
 
     return response.data;
   } catch (error) {
-    console.error('Error deleting static:', error.message);
-    throw error;
+    if (error.response && error.response.status === 403) {
+      throw new Error('You are not the owner of this static and cannot delete it.');
+    }
+    throw error.response?.data || new Error('Failed to delete static.');
   }
 };
+
+
+export const addExistingStatic = async (staticId) => {
+  const token = await getToken();
+
+  try {
+    const response = await api.put(`/api/statics/${staticId}/add`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding static:", error.message);
+    throw error.response?.data || error.message;
+  }
+};
+
 
 
