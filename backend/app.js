@@ -12,6 +12,9 @@ const lodestoneRoutes = require('./routes/lodestoneRoutes')
 const serverStatusRoutes = require('./routes/serverStatusRoutes');
 const pluginsRoutes = require('./routes/pluginsRoutes');
 
+//Middleware
+const logger = require('./middleware/logger');
+
 dotenv.config();
 connectDB();
 
@@ -26,6 +29,9 @@ const app = express();
 
 app.use(cors(corsOptions));
 app.use(express.json());
+
+//Middleware
+app.use(logger);
 
 //Routes
 app.use('/api', authRoutes);
