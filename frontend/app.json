@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/StaticSync BaseLogo.png",
     "extra": {
-      "EXPO_API_URL": "http://localhost:5000"
+      "EXPO_API_URL": "https://static-sync.onrender.com"
     },
     
     "userInterfaceStyle": "light",

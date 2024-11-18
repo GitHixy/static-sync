@@ -18,7 +18,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer 
     linking={{
-      prefixes: ['http://localhost:8081'],
+      prefixes: ['http://192.168.1.60:8081'],
       config: {
         screens: {
           Login: 'login',
