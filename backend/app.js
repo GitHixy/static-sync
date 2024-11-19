@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const passport = require('passport');
+const session = require('express-session');
+require('./config/passport');
 
 //Routes Import
 const authRoutes = require('./routes/authRoutes');
@@ -32,6 +35,15 @@ app.use(express.json());
 
 //Middleware
 app.use(logger);
+app.use(
+    session({
+        secret: process.env.SECRET_KEY,
+        resave: false,
+        saveUninitialized: false,
+    })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Routes
 app.use('/api', authRoutes);

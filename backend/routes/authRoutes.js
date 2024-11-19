@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
@@ -34,6 +35,39 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
+
+router.get('/discord', passport.authenticate('discord'));
+
+
+router.get('/discord/callback', (req, res, next) => {
+    passport.authenticate('discord', async (err, user) => {
+        if (err || !user) {
+            return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=auth_failed`);
+        }
+
+        
+        const token = jwt.sign(
+            { userId: user._id, discordId: user.discord.id },
+            process.env.JWT_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        
+        return res.redirect(
+            `${process.env.BASE_REDIRECT_URL}/success?auth=${token}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+        );
+    })(req, res, next);
+});
+
+
+router.get('/profile', (req, res) => {
+    if (!req.isAuthenticated()) {
+        return res.status(401).json({ error: 'Not authenticated' });
+    }
+    res.json(req.user);
+});
+
+module.exports = router;
 
 module.exports = router;
 

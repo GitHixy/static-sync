@@ -44,11 +44,6 @@ const HomeScreen = ({ navigation }) => {
             <Ionicons name="people-outline" size={30} color="#fff" />
             <Text style={styles.menuText}>Manage Statics</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.replace('Calendar')}>
-            <Ionicons name="calendar" size={30} color="#fff" />
-            <Text style={styles.menuText}>Calendar</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Plugins')}>
             <Ionicons name="code-working" size={30} color="#fff" />
             <Text style={styles.menuText}>Plugins</Text>

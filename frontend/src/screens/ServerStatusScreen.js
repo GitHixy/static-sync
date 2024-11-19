@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 10,
+    padding: 40,
   },
   loader: {
     flex: 1,
