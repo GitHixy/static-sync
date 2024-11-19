@@ -17,7 +17,7 @@ import SuccessScreen from "../screens/SuccessScreen";
 const Stack = createNativeStackNavigator();
 
 const linking = {
-  prefixes: ["https://static-sync.onrender.com","http:localhost:8081", "myapp://"],
+  prefixes: ["https://static-sync-7mzv.onrender.com","http:localhost:8081", "myapp://"],
   config: {
     screens: {
       Success: "success",
