@@ -8,7 +8,7 @@ passport.use(
         {
             clientID: `${process.env.DISCORD_CLIENT_ID}`,
             clientSecret: `${process.env.DISCORD_CLIENT_SECRET}`,
-            callbackURL: `${process.env.BASE_API_URL}/auth/discord/callback`,
+            callbackURL: `${process.env.BASE_API_URL}/api/discord/callback`,
             scope: ['identify', 'email'],
         },
         async (accessToken, refreshToken, profile, done) => {
