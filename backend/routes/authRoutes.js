@@ -3,6 +3,7 @@ const passport = require('passport');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
+const { generateRefreshToken } = require('../utils/generateToken');
 
 router.post('/refresh', async (req, res) => {
     const { token } = req.body;
@@ -51,10 +52,11 @@ router.get('/discord/callback', (req, res, next) => {
             process.env.JWT_SECRET,
             { expiresIn: '15m' }
         );
+        const refreshToken = generateRefreshToken(user._id);
 
         
         return res.redirect(
-            `${process.env.BASE_REDIRECT_URL}/success?auth=${token}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+            `${process.env.BASE_REDIRECT_URL}/success?auth=${token}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
         );
     })(req, res, next);
 });

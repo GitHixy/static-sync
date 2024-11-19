@@ -81,12 +81,14 @@ router.put('/:id/add', protect, async (req, res) => {
   try {
       
       const staticItem = await Static.findById(staticId);
+      console.log('Static Item:', staticItem);
       if (!staticItem) {
           return res.status(404).json({ message: 'Static not found' });
       }
 
       
       const user = await User.findById(req.user._id);
+      console.log('User:', user);
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
       }

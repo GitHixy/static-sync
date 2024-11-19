@@ -5,19 +5,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SuccessScreen = ({ navigation }) => {
   const route = useRoute(); // Extract the route at the top level
-  const { auth, username, discordId, id } = route.params || {};
+  const { auth, username, discordId, id, refreshToken } = route.params || {};
 
   useEffect(() => {
     const processLogin = async () => {
       try {
-        if (auth && id && username && discordId) {
-          console.log("Auth Token:", auth);
-          console.log("User ID:", id);
-          console.log("Username:", username);
-          console.log("Discord ID:", discordId);
+        if (auth && id && username && discordId && refreshToken) {
 
           // Save data to AsyncStorage
           await AsyncStorage.setItem("token", auth);
+          await AsyncStorage.setItem("refreshToken", refreshToken);
           await AsyncStorage.setItem("userId", id);
           await AsyncStorage.setItem("username", username);
           await AsyncStorage.setItem("discordId", discordId);

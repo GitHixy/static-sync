@@ -7,6 +7,9 @@ const HomeScreen = ({ navigation }) => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('refreshToken');
+    await AsyncStorage.removeItem('discordId');
+    await AsyncStorage.removeItem('userId');
+    await AsyncStorage.removeItem('username');
     navigation.replace('Login');
   };
 
