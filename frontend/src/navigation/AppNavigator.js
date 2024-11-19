@@ -13,11 +13,31 @@ import StaticDetailsScreen from "../screens/StaticDetailsScreen";
 import PluginsScreen from "../screens/PluginsScreen";
 import SuccessScreen from "../screens/SuccessScreen";
 
+
 const Stack = createNativeStackNavigator();
+
+const linking = {
+  prefixes: ["https://static-sync.onrender.com","http:localhost:8081", "myapp://"],
+  config: {
+    screens: {
+      Success: "success",
+      Login: "login",
+      Register: "register",
+      Home: "home",
+      News: "news",
+      Maintenance: "maintenance",
+      "Server Status": "server-status",
+      "Search Player": "search-player",
+      "Manage Statics": "manage-statics",
+      "Static Details": "static-details",
+      Plugins: "plugins",
+    },
+  },
+};
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
@@ -154,6 +174,7 @@ const AppNavigator = () => {
           component={SuccessScreen}
           options={{ headerShown: false }}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

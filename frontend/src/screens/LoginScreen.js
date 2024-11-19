@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, ImageBackground, ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, Linking, ImageBackground, ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { loginUser } from '../services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+
+const apiUrl = Constants.expoConfig.extra.EXPO_API_URL ;
+
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -34,7 +38,11 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-
+  const handleDiscordLogin = () => {
+    const discordLoginUrl = `${apiUrl}/api/discord`;
+    window.location.href = discordLoginUrl; 
+  };
+  
 
   return (
     <ImageBackground 
@@ -89,6 +97,11 @@ const LoginScreen = ({ navigation }) => {
 
             <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
               <Text style={styles.loginText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleDiscordLogin} style={styles.discordButton}>
+            <Ionicons name="logo-discord" size={24} color="#fff" style={styles.discordIcon} />
+              
+              <Text style={styles.discordText}> Login with Discord</Text>
             </TouchableOpacity>
           </ScrollView>
         </KeyboardAvoidingView>
@@ -186,6 +199,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  discordButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#7289da',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: 5,
+  },
+
+  discordText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

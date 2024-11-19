@@ -1,63 +1,49 @@
-import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useEffect } from "react";
+import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SuccessScreen = () => {
-    const navigation = useNavigation();
-    const route = useRoute();
+const SuccessScreen = ({ navigation }) => {
+  useEffect(() => {
+    const extractToken = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const token = queryParams.get("auth");
+      const userId = queryParams.get("id");
+      const username = queryParams.get("username");
 
-    useEffect(() => {
-        const storeUserData = async () => {
-            const params = route.params;
+      if (token) {
+        await AsyncStorage.setItem("token", token);
+        await AsyncStorage.setItem("userId", userId);
+        await AsyncStorage.setItem("username", username);
+        navigation.replace("Home");
+      } else {
+        Alert.alert("Login Failed", "Token not found in URL");
+        navigation.replace("Login");
+      }
+    };
 
-            if (params?.auth) {
-                try {
-                    
-                    await AsyncStorage.setItem('Token', params.auth);
-                    await AsyncStorage.setItem('userId', params.id);
-                    await AsyncStorage.setItem('username', params.username);
-                    await AsyncStorage.setItem('discordId', params.discordId);
+    extractToken();
+  }, [navigation]);
 
-                    
-                    console.log('Token salvato:', params.auth);
-                    console.log('Dati utente:', params);
-
-                    
-                    navigation.navigate('Home');
-                } catch (error) {
-                    console.error('Errore nel salvataggio dei dati:', error);
-                    navigation.navigate('Login');
-                }
-            } else {
-                
-                navigation.navigate('Login');
-            }
-        };
-
-        storeUserData();
-    }, [route.params, navigation]);
-
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Authenticated!</Text>
-            <ActivityIndicator size={50} color="#0000ff" />
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size={50} color="#0000ff" />
+      <Text style={styles.text}>Processing Login...</Text>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f0f0f0',
-    },
-    text: {
-        fontSize: 18,
-        marginBottom: 20,
-        color: '#333',
-    },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  text: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#333",
+  },
 });
 
 export default SuccessScreen;
+
