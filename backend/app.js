@@ -5,7 +5,7 @@ const connectDB = require('./config/db');
 const passport = require('passport');
 const session = require('express-session');
 require('./config/passport');
-
+;
 //Routes Import
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');

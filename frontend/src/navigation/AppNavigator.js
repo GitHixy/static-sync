@@ -1,143 +1,159 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import HomeScreen from '../screens/HomeScreen';
-import NewsScreen from '../screens/NewsScreen';
-import MaintenanceScreen from '../screens/MaintenanceScreen';
-import ServerStatusScreen from '../screens/ServerStatusScreen';
-import SearchPlayerScreen from '../screens/SearchPlayerScreen';
-import ManageStaticScreen from '../screens/ManageStaticScreen';
-import StaticDetailsScreen from '../screens/StaticDetailsScreen';
-import PluginsScreen from '../screens/PluginsScreen';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../screens/HomeScreen";
+import NewsScreen from "../screens/NewsScreen";
+import MaintenanceScreen from "../screens/MaintenanceScreen";
+import ServerStatusScreen from "../screens/ServerStatusScreen";
+import SearchPlayerScreen from "../screens/SearchPlayerScreen";
+import ManageStaticScreen from "../screens/ManageStaticScreen";
+import StaticDetailsScreen from "../screens/StaticDetailsScreen";
+import PluginsScreen from "../screens/PluginsScreen";
+import SuccessScreen from "../screens/SuccessScreen";
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer 
-    linking={{
-      prefixes: ['http://192.168.1.60:8081', 'https://static-sync-7mzv.onrender.com'],
-      config: {
-        screens: {
-          Login: 'login',
-          Register: 'register',
-          Home: 'home',
-          News: 'news',
-          Maintenance: 'maintenance',
-          ServerStatus: 'server-status',
-          SearchPlayer: 'search-player',
-          ManageStatics: '/',
-          StaticDetails: 'static-details/:staticId',
-          Plugins: 'Plugins',
-        },
-      },
-    }}>
+    <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-        <Stack.Screen name="Register" component={RegisterScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}/>
-        <Stack.Screen name="Home" component={HomeScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}/>
-        <Stack.Screen name="News" component={NewsScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}/>
-        <Stack.Screen name="Maintenance" component={MaintenanceScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }}/>
-        <Stack.Screen name="Server Status" component={ServerStatusScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-        <Stack.Screen name="Search Player" component={SearchPlayerScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-        <Stack.Screen name="Manage Statics" component={ManageStaticScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-        <Stack.Screen name="Static Details" component={StaticDetailsScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-        <Stack.Screen name="Plugins" component={PluginsScreen} 
-        options={{
-          headerStyle: {
-            backgroundColor: '#000', 
-          },
-          headerTintColor: '#fff', 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-          },
-        }} />
-
-
-
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="News"
+          component={NewsScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Maintenance"
+          component={MaintenanceScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Server Status"
+          component={ServerStatusScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Search Player"
+          component={SearchPlayerScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Manage Statics"
+          component={ManageStaticScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Static Details"
+          component={StaticDetailsScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Plugins"
+          component={PluginsScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Success"
+          component={SuccessScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

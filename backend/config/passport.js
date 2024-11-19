@@ -3,10 +3,11 @@ const DiscordStrategy = require('passport-discord').Strategy;
 const User = require('../models/User');
 
 passport.use(
+
     new DiscordStrategy(
         {
-            clientID: process.env.DISCORD_CLIENT_ID,
-            clientSecret: process.env.DISCORD_CLIENT_SECRET,
+            clientID: `${process.env.DISCORD_CLIENT_ID}`,
+            clientSecret: `${process.env.DISCORD_CLIENT_SECRET}`,
             callbackURL: `${process.env.BASE_API_URL}/auth/discord/callback`,
             scope: ['identify', 'email'],
         },
