@@ -4,7 +4,7 @@
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "npx expo start",
-    "build": "npx expo export:web",
+    "build": "npx expo export:web && echo '/* /index.html 200' > web-build/_redirects",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
