@@ -39,7 +39,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleDiscordLogin = () => {
-    const discordLoginUrl = `${apiUrl}/api/discord`;
+    const discordLoginUrl = `${apiUrl}/api/discord`; 
     window.location.href = discordLoginUrl; 
   };
   

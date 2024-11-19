@@ -1,19 +1,25 @@
 import React, { useEffect } from "react";
 import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
+import { useRoute } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SuccessScreen = ({ navigation }) => {
   useEffect(() => {
     const extractToken = async () => {
-      const queryParams = new URLSearchParams(window.location.search);
-      const token = queryParams.get("auth");
-      const userId = queryParams.get("id");
-      const username = queryParams.get("username");
+      const route = useRoute();
+      const { auth, username, discordId, id } = route.params || {};
+      useEffect(() => {
+        console.log('Auth Token:', auth);
+        console.log('User ID:', id);
+        console.log('Username:', username);
+        console.log('Discord ID:', discordId);
+      }, []);
 
-      if (token) {
-        await AsyncStorage.setItem("token", token);
-        await AsyncStorage.setItem("userId", userId);
+      if (auth) {
+        await AsyncStorage.setItem("token", auth);
+        await AsyncStorage.setItem("userId", id);
         await AsyncStorage.setItem("username", username);
+        await AsyncStorage.setItem("discordId", discordId);
         navigation.replace("Home");
       } else {
         Alert.alert("Login Failed", "Token not found in URL");
