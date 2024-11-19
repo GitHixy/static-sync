@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(logger);
 app.use(
     session({
-        secret: process.env.SECRET_KEY,
+        secret: process.env.JWT_SECRET,
         resave: false,
         saveUninitialized: false,
     })
