@@ -1,38 +1,45 @@
 import React, { useEffect } from "react";
 import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SuccessScreen = ({ navigation }) => {
-  useEffect(() => {
-    const extractToken = async () => {
-      const route = useRoute();
-      const { auth, username, discordId, id } = route.params || {};
-      useEffect(() => {
-        console.log('Auth Token:', auth);
-        console.log('User ID:', id);
-        console.log('Username:', username);
-        console.log('Discord ID:', discordId);
-      }, []);
+  const route = useRoute(); // Extract the route at the top level
+  const { auth, username, discordId, id } = route.params || {};
 
-      if (auth) {
-        await AsyncStorage.setItem("token", auth);
-        await AsyncStorage.setItem("userId", id);
-        await AsyncStorage.setItem("username", username);
-        await AsyncStorage.setItem("discordId", discordId);
-        navigation.replace("Home");
-      } else {
-        Alert.alert("Login Failed", "Token not found in URL");
+  useEffect(() => {
+    const processLogin = async () => {
+      try {
+        if (auth && id && username && discordId) {
+          console.log("Auth Token:", auth);
+          console.log("User ID:", id);
+          console.log("Username:", username);
+          console.log("Discord ID:", discordId);
+
+          // Save data to AsyncStorage
+          await AsyncStorage.setItem("token", auth);
+          await AsyncStorage.setItem("userId", id);
+          await AsyncStorage.setItem("username", username);
+          await AsyncStorage.setItem("discordId", discordId);
+
+          // Navigate to Home
+          navigation.replace("Home");
+        } else {
+          throw new Error("Missing parameters in route.");
+        }
+      } catch (error) {
+        console.error("Login processing failed:", error);
+        Alert.alert("Login Failed", "Unable to process login. Please try again.");
         navigation.replace("Login");
       }
     };
 
-    extractToken();
-  }, [navigation]);
+    processLogin();
+  }, [auth, username, discordId, id, navigation]);
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size={50} color="#0000ff" />
+      <ActivityIndicator size="large" color="#007bff" />
       <Text style={styles.text}>Processing Login...</Text>
     </View>
   );
@@ -43,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
   text: {
     marginTop: 10,
