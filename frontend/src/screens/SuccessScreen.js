@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Alert, Platform } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 
 const SuccessScreen = ({ navigation }) => {
-  const route = useRoute(); // Extract the route at the top level
+  const route = useRoute();
   const { auth, username, discordId, id, refreshToken } = route.params || {};
 
   useEffect(() => {
     const processLogin = async () => {
       try {
         if (auth && id && username && discordId && refreshToken) {
-
           // Save data to AsyncStorage
           await AsyncStorage.setItem("token", auth);
           await AsyncStorage.setItem("refreshToken", refreshToken);
@@ -26,7 +26,17 @@ const SuccessScreen = ({ navigation }) => {
         }
       } catch (error) {
         console.error("Login processing failed:", error);
-        Alert.alert("Login Failed", "Unable to process login. Please try again.");
+
+        // Check platform and redirect to the app's deep link if necessary
+        if (Platform.OS === "ios" || Platform.OS === "android") {
+          const appDeepLink = Linking.createURL("/auth-failed");
+          console.log("Redirecting to deep link:", appDeepLink);
+          Linking.openURL(appDeepLink); // Opens the app's deep link
+        } else {
+          Alert.alert("Login Failed", "Unable to process login. Please try again.");
+        }
+
+        // Optionally, navigate back to Login screen
         navigation.replace("Login");
       }
     };
@@ -36,7 +46,7 @@ const SuccessScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#007bff" />
+      <ActivityIndicator size={50} color="#007bff" />
       <Text style={styles.text}>Processing Login...</Text>
     </View>
   );
@@ -57,4 +67,5 @@ const styles = StyleSheet.create({
 });
 
 export default SuccessScreen;
+
 

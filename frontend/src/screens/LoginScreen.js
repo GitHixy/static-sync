@@ -39,8 +39,10 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleDiscordLogin = () => {
-    const discordLoginUrl = `${apiUrl}/api/discord`; 
-    window.location.href = discordLoginUrl; 
+    const discordLoginUrl = `${apiUrl}/api/discord?platform=mobile`; 
+    Linking.openURL(discordLoginUrl).catch((err) => 
+      console.error('Failed to open URL:', err)
+  );
   };
   
 
@@ -52,7 +54,7 @@ const LoginScreen = ({ navigation }) => {
     >
       {isLoading ? (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size={50} color="#fff" />
         </View>
       ) : (
         <KeyboardAvoidingView 

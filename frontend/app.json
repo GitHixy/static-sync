@@ -29,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/StaticSync BaseLogo.png"
-    }
+    },
+    "scheme": "myapp",
+    "platforms": ["ios", "android"]
   }
 }

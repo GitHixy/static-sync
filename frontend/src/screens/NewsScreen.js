@@ -63,10 +63,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 40,
+
   },
   listContainer: {
-    paddingTop: 20,
+    padding: 40,
   },
   card: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',

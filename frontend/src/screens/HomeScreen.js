@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
     <ImageBackground 
       source={require('../../assets/HomeBG.webp')} 
       style={styles.background}
-      resizeMode="cover"
+      
     >
       <View style={styles.overlay}>
         <Text style={styles.welcomeText}>Static Sync</Text>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
-    padding: 10,
+
   },
   overlay: {
     flex: 1,

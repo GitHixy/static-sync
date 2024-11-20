@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Clipboard from "@react-native-clipboard/clipboard";
+import * as Clipboard from 'expo-clipboard';
 import { useNavigation } from "@react-navigation/native";
 import {
   View,
@@ -104,109 +104,108 @@ const ManageStaticScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../../assets/HomeBG.webp")}
-      style={styles.background}
-    >
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.form}>
-          <Text style={styles.title}>Create a Static</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Static Name"
-            placeholderTextColor="#888"
-            value={name}
-            onChangeText={setName}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Description (optional)"
-            placeholderTextColor="#888"
-            value={description}
-            onChangeText={setDescription}
-          />
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={handleCreateStatic}
-          >
-            <Text style={styles.createButtonText}>Create</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.form}>
-          <Text style={styles.title}>Add an Existing Static</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter Static ID"
-            placeholderTextColor="#888"
-            value={staticId}
-            onChangeText={setStaticId}
-          />
-          <TouchableOpacity
-            style={styles.createButton}
-            onPress={handleAddStatic}
-          >
-            <Text style={styles.createButtonText}>Add Static</Text>
-          </TouchableOpacity>
-        </View>
-
-        {isLoading ? (
-          <ActivityIndicator size={50} color="#fff" style={styles.spinner} />
-        ) : (
-          <View style={styles.staticList}>
-            <Text style={styles.sectionTitle}>Your Statics</Text>
-            <FlatList
-              data={statics}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item }) => (
-                <View style={styles.card}>
-                  <View style={styles.cardHeader}>
-                    <Text style={styles.cardTitle}>{item.name}</Text>
-                    <TouchableOpacity
-                      style={styles.deleteButton}
-                      onPress={() => confirmDeleteStatic(item)}
-                    >
-                      <Text style={styles.deleteButtonText}>X</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Text style={styles.cardDescription}>
-                    {item.description || "No description provided."}
-                  </Text>
-                  <Text style={styles.cardDetails}>
-                    Members: {item.members.length} / 8 |{" Roster is "}
-                    {item.isValidComposition ? "Complete" : "Incomplete"}
-                  </Text>
-                  <Text style={styles.cardDetails}>
-                    Static ID: {item._id}
-                    <TouchableOpacity
-                      onPress={() => {
-                        Clipboard.setString(item._id);
-                        setCopied(true);
-                        setTimeout(() => setCopied(false), 4000);
-                      }}
-                    >
-                      <Text style={styles.copyButton}>
-                        {copied ? " Copied!" : " Copy ID"}
-                      </Text>
-                    </TouchableOpacity>
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.detailsButton}
-                    onPress={() => {
-                      navigation.navigate("Static Details", {
-                        staticId: item._id,
-                      });
-                    }}
-                  >
-                    <Text style={styles.detailsButtonText}>Roster Details</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            />
+    source={require("../../assets/HomeBG.webp")}
+    style={styles.background}
+  >
+    <FlatList
+      data={statics}
+      keyExtractor={(item) => item._id}
+      renderItem={({ item }) => (
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>{item.name}</Text>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => confirmDeleteStatic(item)}
+            >
+              <Text style={styles.deleteButtonText}>X</Text>
+            </TouchableOpacity>
           </View>
-        )}
-      </ScrollView>
-    </ImageBackground>
-  );
+          <Text style={styles.cardDescription}>
+            {item.description || "No description provided."}
+          </Text>
+          <Text style={styles.cardDetails}>
+            Members: {item.members.length} / 8 |{" "}
+            {item.isValidComposition ? "Roster is Complete" : "Roster is Incomplete"}
+          </Text>
+          <Text style={styles.cardDetails}>
+            Static ID: {item._id}
+            
+          </Text>
+          <TouchableOpacity
+              onPress={() => {
+                Clipboard.setStringAsync(item._id);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 4000);
+              }}
+            >
+              <Text style={styles.copyButton}>
+                {copied ? "Copied!" : "Copy ID"}
+              </Text>
+            </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.detailsButton}
+            onPress={() => {
+              navigation.navigate("Static Details", {
+                staticId: item._id,
+              });
+            }}
+          >
+            <Text style={styles.detailsButtonText}>Roster Details</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      ListHeaderComponent={
+        <>
+          <View style={styles.form}>
+            <Text style={styles.title}>Create a Static</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Static Name"
+              placeholderTextColor="#888"
+              value={name}
+              onChangeText={setName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Description (optional)"
+              placeholderTextColor="#888"
+              value={description}
+              onChangeText={setDescription}
+            />
+            <TouchableOpacity
+              style={styles.createButton}
+              onPress={handleCreateStatic}
+            >
+              <Text style={styles.createButtonText}>Create</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.form}>
+            <Text style={styles.title}>Add an Existing Static</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Static ID"
+              placeholderTextColor="#888"
+              value={staticId}
+              onChangeText={setStaticId}
+            />
+            <TouchableOpacity
+              style={styles.createButton}
+              onPress={handleAddStatic}
+            >
+              <Text style={styles.createButtonText}>Add Static</Text>
+            </TouchableOpacity>
+          </View>
+          {isLoading && (
+            <ActivityIndicator size={50} color="#fff" style={styles.spinner} />
+          )}
+          <Text style={styles.sectionTitle}>Your Statics</Text>
+        </>
+      }
+      contentContainerStyle={styles.container}
+    />
+  </ImageBackground>
+);
 };
 
 const styles = StyleSheet.create({
@@ -215,7 +214,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
     height: "100%",
-    padding: 10,
+
   },
   container: {
     padding: 20,
@@ -226,7 +225,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 25,
     marginBottom: 30,
-    width: "90%",
+    width: 300,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -242,10 +241,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   copyButton: {
-    fontSize: 12,
+    fontSize: 14,
     color: "#007bff",
     fontWeight: "bold",
-    
+    marginBlock: 2,
   },
   input: {
     backgroundColor: "rgba(255, 255, 255, 0.9)",
@@ -288,6 +287,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     textTransform: "uppercase",
+    padding: 10,
   },
   card: {
     backgroundColor: "rgba(0, 0, 0, 0.8)",

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
+  Linking
 } from 'react-native';
 import {
   fetchActPlugins,
@@ -197,7 +198,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    paddingTop: 120, 
+ 
   },
   header: {
     position: 'absolute',
@@ -205,16 +206,21 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-around',
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     paddingVertical: 10,
     zIndex: 10,
+  
   },
   headerButton: {
+    width: 150,
+    textAlign: 'center',
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 20,
     backgroundColor: '#444',
+    margin: 5,
   },
   activeButton: {
     backgroundColor: '#007bff',
@@ -226,12 +232,13 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     position: 'absolute',
-    top: 60,
+    top: 110,
     left: 10,
     right: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     borderRadius: 10,
     padding: 10,
+    zIndex: 2,
   },
   searchInput: {
     backgroundColor: '#222',
@@ -239,6 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 8,
     fontSize: 16,
+    zIndex: 2,
   },
   spinnerContainer: {
     flex: 1,
@@ -246,6 +254,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listContainer: {
+    display: 'flex',
+    marginTop: 160,
     padding: 10,
   },
   title: {
@@ -278,14 +288,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    alignItems: 'center',
+    paddingVertical: 20,
+    textAlign: 'center',
+    marginBottom: 30,
   },
   pageButton: {
     backgroundColor: '#007bff',
     borderRadius: 5,
     paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
   },
   disabledButton: {
     backgroundColor: '#555',
@@ -304,6 +315,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     borderRadius: 10,
     padding: 10,
+    paddingTop: 40,
     margin: 5,
     elevation: 3,
     shadowColor: '#000',
@@ -311,6 +323,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     marginBottom: 15,
     position: 'relative',
+    height: 160,
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
   },
   isFork: {
     position: 'absolute',

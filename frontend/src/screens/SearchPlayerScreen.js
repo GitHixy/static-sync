@@ -22,7 +22,6 @@ const SearchPlayerScreen = () => {
   const [characterData, setCharacterData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  console.log(characterData);
 
   const [role, setRole] = useState("");
   const [classOptions, setClassOptions] = useState([]);
@@ -462,10 +461,10 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
     height: "100%",
-    padding: 10,
+
   },
   scrollContainer: {
-    paddingTop: 20,
+    padding: 20,
     alignItems: "center",
   },
   form: {

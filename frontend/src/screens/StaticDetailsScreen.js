@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   ImageBackground,
   TouchableOpacity,
+  Platform
 } from 'react-native';
 import { fetchStaticById, updateStaticMembers } from '../services/staticService';
 
@@ -326,6 +327,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   rankingsTable: {
+    width: '100%',
     marginBottom: 20,
     borderWidth: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -336,25 +338,38 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: 'row',
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    padding: 10,
+    paddingVertical: 10,
+    alignItems: 'center', 
+    textAlign: 'center',
   },
   tableHeaderText: {
+    paddingVertical: 10,
     flex: 1,
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
+    width: 100,
+    overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  paddingHorizontal: 5,
   },
   tableRow: {
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+    margin: 0,
   },
   tableCell: {
+    paddingVertical: 5,
     flex: 1,
-    fontSize: 14,
+    fontSize: 12,
     textAlign: 'center',
     color: '#fff',
+    width: 100,
+    paddingHorizontal: 5,
   },
   highlight: {
     fontWeight: 'bold',

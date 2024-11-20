@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 20,
+
   },
   listContainer: {
-    paddingTop: 20,
+    padding: 20,
   },
   card: {
     flex: 1,

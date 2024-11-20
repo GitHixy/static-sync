@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '100%',
     height: '100%',
-    padding: 40,
+
   },
   loader: {
     flex: 1,
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   listContainer: {
-    paddingTop: 20,
+    padding: 30,
   },
   dataCenterCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
