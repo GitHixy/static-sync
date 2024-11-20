@@ -6,11 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/StaticSync BaseLogo.png",
     "extra": {
-      "EXPO_API_URL": "https://static-sync.onrender.com"
+      "EXPO_API_URL": "https://static-sync.onrender.com",
+      "eas": {
+        "projectId": "62954318-f984-42fd-9c6b-f8dbeaa2bfd9"
+      }
     },
-    
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "splash": {
       "image": "./assets/StaticSync BaseLogo.png",
       "resizeMode": "contain",
@@ -33,6 +37,10 @@
       "favicon": "./assets/StaticSync BaseLogo.png"
     },
     "scheme": "myapp",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
   }
 }
