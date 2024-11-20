@@ -16,6 +16,9 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {      "android": {
+      "serviceAccountKeyPath": "./static-sync-ac36d4e5e27a.json",
+      "track": "internal" //Internal Test
+    }}
   }
 }

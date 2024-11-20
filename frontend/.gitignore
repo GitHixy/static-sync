@@ -3,6 +3,10 @@
 # dependencies
 node_modules/
 
+# Dev Key
+/static-sync-ac36d4e5e27a
+
+
 # Expo
 .expo/
 dist/
