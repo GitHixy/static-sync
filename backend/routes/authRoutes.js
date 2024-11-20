@@ -37,28 +37,35 @@ router.post('/refresh', async (req, res) => {
 });
 
 
-router.get('/discord', passport.authenticate('discord'));
+router.get('/discord', (req, res, next) => {
+    const platform = req.query.platform || 'web'; 
+    const state = Buffer.from(JSON.stringify({ platform })).toString('base64');
+
+    passport.authenticate('discord', { state })(req, res, next);
+});
 
 
 router.get('/discord/callback', (req, res, next) => {
+    const state = req.query.state
+        ? JSON.parse(Buffer.from(req.query.state, 'base64').toString('utf-8'))
+        : {};
+
+    console.log("Decoded state:", state);
+
+    const isMobile = state.platform === 'mobile';
     passport.authenticate('discord', async (err, user) => {
         if (err || !user) {
             return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=auth_failed`);
         }
 
-        
         const accessToken = generateAccessToken(user._id, user.isAdmin);
         const refreshToken = generateRefreshToken(user._id);
-
-        
-        const isMobile = req.query.platform === "mobile";
-        console.log('Is Mobile:', isMobile); // Log per verificare
 
         const redirectUrl = isMobile
             ? `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
             : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
-        console.log(`Redirecting to: ${redirectUrl}`); // Log utile per debug
+        console.log("Redirecting to:", redirectUrl);
         return res.redirect(redirectUrl);
     })(req, res, next);
 });

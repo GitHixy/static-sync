@@ -13,6 +13,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = Platform.OS === "ios" || Platform.OS === "android";
 
   useEffect(() => {
     const checkToken = async () => {
@@ -39,10 +40,11 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleDiscordLogin = () => {
-    const discordLoginUrl = `${apiUrl}/api/discord?platform=mobile`; 
-    Linking.openURL(discordLoginUrl).catch((err) => 
-      console.error('Failed to open URL:', err)
-  );
+    const baseUrl = `${apiUrl}/api/discord`;
+    const platformQuery = isMobile ? "?platform=mobile" : "";
+    const discordLoginUrl = `${baseUrl}${platformQuery}`;
+    console.log("Generated Discord Login URL:", discordLoginUrl);
+    Linking.openURL(discordLoginUrl);
   };
   
 
