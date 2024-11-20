@@ -50,19 +50,11 @@ router.get('/discord/callback', (req, res, next) => {
         const accessToken = generateAccessToken(user._id, user.isAdmin);
         const refreshToken = generateRefreshToken(user._id);
 
-        const platform = req.query.platform || 'web';
+        const redirectUrl = req.headers["user-agent"].includes("Expo") || req.query.platform === "mobile"
+            ? `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+            : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
-        if (platform === 'mobile') {
-            
-            return res.redirect(
-                `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
-            );
-        } else {
-            
-            return res.redirect(
-                `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
-            );
-        }
+        return res.redirect(redirectUrl);
     })(req, res, next);
 });
 
