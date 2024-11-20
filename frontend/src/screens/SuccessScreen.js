@@ -1,48 +1,39 @@
 import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Alert, Platform } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
 import * as Linking from "expo-linking";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SuccessScreen = ({ navigation }) => {
-  const route = useRoute();
-  const { auth, username, discordId, id, refreshToken } = route.params || {};
-
   useEffect(() => {
-    const processLogin = async () => {
-      try {
-        if (auth && id && username && discordId && refreshToken) {
-          // Save data to AsyncStorage
-          await AsyncStorage.setItem("token", auth);
-          await AsyncStorage.setItem("refreshToken", refreshToken);
-          await AsyncStorage.setItem("userId", id);
-          await AsyncStorage.setItem("username", username);
-          await AsyncStorage.setItem("discordId", discordId);
+    const handleDeepLink = async () => {
+      const url = await Linking.getInitialURL();
 
-          // Navigate to Home
-          navigation.replace("Home");
+      if (url) {
+        const { queryParams } = Linking.parse(url);
+        const { auth, refreshToken, id, username, discordId } = queryParams;
+
+        if (auth && refreshToken && id && username && discordId) {
+          try {
+            await AsyncStorage.setItem("token", auth);
+            await AsyncStorage.setItem("refreshToken", refreshToken);
+            await AsyncStorage.setItem("userId", id);
+            await AsyncStorage.setItem("username", username);
+            await AsyncStorage.setItem("discordId", discordId);
+
+            navigation.replace("Home");
+          } catch (error) {
+            Alert.alert("Error", "Failed to process login");
+            navigation.replace("Login");
+          }
         } else {
-          throw new Error("Missing parameters in route.");
+          Alert.alert("Error", "Invalid login data");
+          navigation.replace("Login");
         }
-      } catch (error) {
-        console.error("Login processing failed:", error);
-
-        // Check platform and redirect to the app's deep link if necessary
-        if (Platform.OS === "ios" || Platform.OS === "android") {
-          const appDeepLink = Linking.createURL("/auth-failed");
-          console.log("Redirecting to deep link:", appDeepLink);
-          Linking.openURL(appDeepLink); // Opens the app's deep link
-        } else {
-          Alert.alert("Login Failed", "Unable to process login. Please try again.");
-        }
-
-        // Optionally, navigate back to Login screen
-        navigation.replace("Login");
       }
     };
 
-    processLogin();
-  }, [auth, username, discordId, id, navigation]);
+    handleDeepLink();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -67,5 +58,6 @@ const styles = StyleSheet.create({
 });
 
 export default SuccessScreen;
+
 
 

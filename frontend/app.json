@@ -18,19 +18,21 @@
     },
     "ios": {
       "supportsTablet": true,
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "bundleIdentifier": "com.yourapp.staticSync"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/StaticSync BaseLogo.png",
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true
+      "newArchEnabled": true,
+      "package": "com.yourapp.staticSync"
     },
     "web": {
       "favicon": "./assets/StaticSync BaseLogo.png"
     },
     "scheme": "myapp",
-    "platforms": ["ios", "android", "web"]
+    "platforms": ["ios", "android", "web"],
   }
 }

@@ -52,12 +52,13 @@ router.get('/discord/callback', (req, res, next) => {
 
         
         const isMobile = req.query.platform === "mobile";
+        console.log('Is Mobile:', isMobile); // Log per verificare
 
         const redirectUrl = isMobile
             ? `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
             : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
-        console.log(`Redirecting to: ${redirectUrl}`); 
+        console.log(`Redirecting to: ${redirectUrl}`); // Log utile per debug
         return res.redirect(redirectUrl);
     })(req, res, next);
 });
