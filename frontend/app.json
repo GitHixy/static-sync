@@ -4,7 +4,7 @@
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/StaticSync BaseLogo.png",
+    "icon": "./assets/StaticSync_BaseLogo.png",
     "extra": {
       "EXPO_API_URL": "https://static-sync.onrender.com",
       "eas": {
@@ -16,8 +16,8 @@
       "**/*"
     ],
     "splash": {
-      "image": "./assets/StaticSync BaseLogo.png",
-      "resizeMode": "contain",
+      "image": "./assets/StaticSync_BaseLogo.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
@@ -27,14 +27,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/StaticSync BaseLogo.png",
+        "foregroundImage": "./assets/StaticSync_BaseLogo.png",
         "backgroundColor": "#ffffff"
       },
-      "newArchEnabled": true,
+      "newArchEnabled": false,
       "package": "com.yourapp.staticSync"
     },
     "web": {
-      "favicon": "./assets/StaticSync BaseLogo.png"
+      "favicon": "./assets/StaticSync_BaseLogo.png"
     },
     "scheme": "myapp",
     "platforms": [
