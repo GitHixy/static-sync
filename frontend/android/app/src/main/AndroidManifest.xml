@@ -1,10 +1,20 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- Permessi -->
   <uses-permission android:name="android.permission.INTERNET"/>
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+      android:maxSdkVersion="32" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-  <uses-permission android:name="android.permission.VIBRATE"/>
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.VIBRATE" />
+
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+
+  <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+      android:maxSdkVersion="32"/>
+
 
   <!-- Intenti espliciti per le query -->
   <queries>
@@ -23,7 +33,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="true"
       android:theme="@style/AppTheme"
-      android:supportsRtl="true">
+      android:supportsRtl="true"
+      tools:targetApi="tiramisu">
     
     <!-- Configurazioni di Expo -->
     <meta-data android:name="expo.modules.updates.ENABLED" android:value="false"/>
@@ -38,7 +49,8 @@
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.App.SplashScreen"
         android:exported="true"
-        android:screenOrientation="portrait">
+        android:screenOrientation="fullSensor"
+        tools:ignore="DiscouragedApi">
 
       <!-- Intent principale per avviare l'app -->
       <intent-filter>
@@ -47,15 +59,13 @@
       </intent-filter>
 
       <!-- Intenti per deep link -->
-      <intent-filter android:autoVerify="true">
+      <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         
         <!-- Schemi per deep link -->
         <data android:scheme="myapp" android:host="success"/>
-        <data android:scheme="com.yourapp.staticSync" android:host="success"/>
-        <data android:scheme="exp+frontend" android:host="success"/>
       </intent-filter>
     </activity>
   </application>

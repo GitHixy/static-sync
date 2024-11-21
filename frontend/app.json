@@ -30,6 +30,18 @@
         "foregroundImage": "./assets/StaticSync_BaseLogo.png",
         "backgroundColor": "#ffffff"
       },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "myapp",
+              "host": "success"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
       "newArchEnabled": false,
       "package": "com.yourapp.staticSync"
     },

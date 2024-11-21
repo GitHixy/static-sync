@@ -1,55 +1,57 @@
 import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Alert } from "react-native";
-import * as Linking from "expo-linking";
+import { View, Text, ActivityIndicator, StyleSheet, Alert, Linking } from "react-native";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SuccessScreen = ({ navigation }) => {
-  useEffect(() => {
-    const handleDeepLink = async () => {
+  const handleDeepLink = async (url) => {
+    console.log("Received URL:", url);
+
+    if (!url) {
+      Alert.alert("Error", "No URL received");
+      navigation.replace("Login");
+      return;
+    }
+
+    const { queryParams } = Linking.parse(url);
+    console.log("Parsed Query Params:", queryParams);
+
+    const { auth, refreshToken, id, username, discordId } = queryParams;
+
+    if (auth && refreshToken && id && username && discordId) {
       try {
-        // Log to check if the deep link is being captured
-        const initialUrl = await Linking.getInitialURL();
-        console.log("Initial URL:", initialUrl);
+        await AsyncStorage.setItem("token", auth);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+        await AsyncStorage.setItem("userId", id);
+        await AsyncStorage.setItem("username", username);
+        await AsyncStorage.setItem("discordId", discordId);
 
-        Linking.addEventListener("url", ({ url }) => {
-          console.log("Received URL through event:", url);
-        });
-
-        const url = initialUrl;
-
-        if (url) {
-          const { queryParams } = Linking.parse(url);
-          console.log("Parsed queryParams:", queryParams);
-
-          const { auth, refreshToken, id, username, discordId } = queryParams;
-
-          if (auth && refreshToken && id && username && discordId) {
-            // Save tokens and user details
-            await AsyncStorage.setItem("token", auth);
-            await AsyncStorage.setItem("refreshToken", refreshToken);
-            await AsyncStorage.setItem("userId", id);
-            await AsyncStorage.setItem("username", username);
-            await AsyncStorage.setItem("discordId", discordId);
-
-            navigation.replace("Home");
-          } else {
-            console.error("Invalid login data");
-            Alert.alert("Error", "Invalid login data");
-            navigation.replace("Login");
-          }
-        } else {
-          console.error("No deep link received");
-          Alert.alert("Error", "No deep link received");
-          navigation.replace("Login");
-        }
+        navigation.replace("Home");
       } catch (error) {
-        console.error("Error handling deep link:", error);
-        Alert.alert("Error", "Failed to process login");
+        console.error("Error saving to AsyncStorage:", error);
+        Alert.alert("Error", "Failed to save login data");
         navigation.replace("Login");
       }
+    } else {
+      Alert.alert("Error", "Invalid login data");
+      navigation.replace("Login");
+    }
+  };
+
+  useEffect(() => {
+    const getInitialURL = async () => {
+      const initialUrl = await Linking.getInitialURL();
+      console.log("Initial URL:", initialUrl);
+      handleDeepLink(initialUrl);
     };
 
-    handleDeepLink();
+    const onLink = ({ url }) => {
+      console.log("Linking Event URL:", url);
+      handleDeepLink(url);
+    };
+
+    Linking.addEventListener("url", onLink);
+    getInitialURL();
 
     return () => {
       Linking.removeAllListeners("url");
@@ -73,12 +75,14 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 20,
-    fontSize: 16,
+    fontSize: 18,
     color: "#333",
   },
 });
 
 export default SuccessScreen;
+
+
 
 
 

@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const linking = {
   prefixes: [
     "https://static-sync-7mzv.onrender.com",
-   "http://localhost:8081",
+   "http://192.168.1.60:8081",
    "myapp://",
     "exp://127.0.0.1:19000",
   ],
