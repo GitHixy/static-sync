@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Linking, ImageBackground, ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, Linking, ImageBackground, 
+  ActivityIndicator, Alert, Image, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
 import { loginUser } from '../services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
