@@ -1,60 +1,74 @@
 import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator, StyleSheet, Alert, Linking } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Linking from "expo-linking";
 
-const SuccessScreen = ({ navigation }) => {
-  const handleDeepLink = async (url) => {
-    console.log("Received URL:", url);
-
-    if (!url) {
-      Alert.alert("Error", "No URL received");
-      navigation.replace("Login");
-      return;
-    }
-
-    const { queryParams } = Linking.parse(url);
-    console.log("Parsed Query Params:", queryParams);
-
-    const { auth, refreshToken, id, username, discordId } = queryParams;
-
-    if (auth && refreshToken && id && username && discordId) {
+const SuccessPage = ({ navigation }) => {
+  useEffect(() => {
+    const processAuthentication = async () => {
       try {
-        await AsyncStorage.setItem("token", auth);
-        await AsyncStorage.setItem("refreshToken", refreshToken);
-        await AsyncStorage.setItem("userId", id);
-        await AsyncStorage.setItem("username", username);
-        await AsyncStorage.setItem("discordId", discordId);
+        let url;
 
-        navigation.replace("Home");
+        // Distinzione tra web e mobile
+        if (typeof window !== "undefined" && window.location) {
+          // Ambiente web
+          url = window.location.href;
+        } else {
+          // Ambiente mobile
+          const initialUrl = await Linking.getInitialURL();
+          url = initialUrl;
+        }
+
+        console.log("Received URL:", url);
+
+        if (!url) {
+          throw new Error("No URL received");
+        }
+
+        const urlParams = new URLSearchParams(new URL(url).search); // Estrai i parametri
+        const auth = urlParams.get("auth");
+        const refreshToken = urlParams.get("refreshToken");
+        const id = urlParams.get("id");
+        const username = urlParams.get("username");
+        const discordId = urlParams.get("discordId");
+
+        console.log("Parsed URL parameters:", {
+          auth,
+          refreshToken,
+          id,
+          username,
+          discordId,
+        });
+
+        // Controlla che tutti i parametri siano presenti
+        if (auth && refreshToken && id && username && discordId) {
+          console.log("Saving authentication data...");
+
+          // Salva i dati in AsyncStorage
+          await AsyncStorage.setItem("token", auth);
+          await AsyncStorage.setItem("refreshToken", refreshToken);
+          await AsyncStorage.setItem("userId", id);
+          await AsyncStorage.setItem("username", username);
+          await AsyncStorage.setItem("discordId", discordId);
+
+          console.log("Authentication data saved successfully!");
+
+          // Reindirizza alla homepage
+          navigation.replace("Home");
+        } else {
+          console.error("Invalid URL parameters");
+          Alert.alert("Error", "Authentication failed. Redirecting to login...");
+          navigation.replace("Login");
+        }
       } catch (error) {
-        console.error("Error saving to AsyncStorage:", error);
-        Alert.alert("Error", "Failed to save login data");
+        console.error("Error during authentication process:", error);
+        Alert.alert("Error", "An unexpected error occurred. Redirecting to login...");
         navigation.replace("Login");
       }
-    } else {
-      Alert.alert("Error", "Invalid login data");
-      navigation.replace("Login");
-    }
-  };
-
-  useEffect(() => {
-    const getInitialURL = async () => {
-      const initialUrl = await Linking.getInitialURL();
-      console.log("Initial URL:", initialUrl);
-      handleDeepLink(initialUrl);
     };
 
-    const subscription = Linking.addListener("url", ({ url }) => {
-      console.log("Linking Event URL:", url);
-      handleDeepLink(url);
-    });
-
-    getInitialURL();
-
-    return () => {
-      subscription.remove(); // Cleanup listener
-    };
-  }, []);
+    processAuthentication();
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -78,7 +92,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SuccessScreen;
+export default SuccessPage;
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import LoginScreen from "../screens/LoginScreen";
@@ -14,13 +15,14 @@ import StaticDetailsScreen from "../screens/StaticDetailsScreen";
 import PluginsScreen from "../screens/PluginsScreen";
 import SuccessScreen from "../screens/SuccessScreen";
 
+export const navigationRef = React.createRef();
+
 const Stack = createNativeStackNavigator();
 
 const linking = {
   prefixes: [
     "https://static-sync-7mzv.onrender.com",
-   "http://192.168.1.60:8081",
-   "myapp://",
+   "myapp://static-sync-7mzv.onrender.com",
     "exp://127.0.0.1:19000",
   ],
   config: {
@@ -42,7 +44,7 @@ const linking = {
 
 const AppNavigator = () => {
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer ref={navigationRef} linking={linking}>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"

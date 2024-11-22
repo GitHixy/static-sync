@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground, Platform } from 'react-native';
-import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const HomeScreen = ({ navigation }) => {
   const handleLogout = async () => {
@@ -23,35 +25,37 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.welcomeText}>Static Sync</Text>
         
         <View style={styles.menuContainer}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('News')}>
-            <Ionicons name="newspaper-outline" size={30} color="#fff" />
-            <Text style={styles.menuText}>News</Text>
-          </TouchableOpacity>
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('News')}>
+    <FontAwesome name="newspaper-o" size={30} color="#fff" />
+    <Text style={styles.menuText}>News</Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Maintenance')}>
-            <FontAwesome name="wrench" size={30} color="#fff" />
-            <Text style={styles.menuText}>Maintenance</Text>
-          </TouchableOpacity>
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Maintenance')}>
+    <FontAwesome name="wrench" size={30} color="#fff" />
+    <Text style={styles.menuText}>Maintenance</Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Server Status')}>
-            <Ionicons name="server-outline" size={30} color="#fff" />
-            <Text style={styles.menuText}>Server Status</Text>
-          </TouchableOpacity>
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Server Status')}>
+    <FontAwesome name="server" size={30} color="#fff" />
+    <Text style={styles.menuText}>Server Status</Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Search Player')}>
-            <Ionicons name="search-outline" size={30} color="#fff" />
-            <Text style={styles.menuText}>Player Search</Text>
-          </TouchableOpacity>
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Search Player')}>
+    <FontAwesome name="search" size={30} color="#fff" />
+    <Text style={styles.menuText}>Player Search</Text>
+  </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Manage Statics')}>
-            <Ionicons name="people-outline" size={30} color="#fff" />
-            <Text style={styles.menuText}>Manage Statics</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Plugins')}>
-            <Ionicons name="code-working" size={30} color="#fff" />
-            <Text style={styles.menuText}>Plugins</Text>
-          </TouchableOpacity>
-        </View>
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Manage Statics')}>
+    <FontAwesome name="users" size={30} color="#fff" />
+    <Text style={styles.menuText}>Manage Statics</Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Plugins')}>
+    <FontAwesome name="puzzle-piece" size={30} color="#fff" />
+    <Text style={styles.menuText}>Plugins</Text>
+  </TouchableOpacity>
+</View>
+
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Logout</Text>
