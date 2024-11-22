@@ -6,11 +6,6 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { generateRefreshToken, generateAccessToken } = require('../utils/generateToken');
 
-const generateCodeChallenge = (codeVerifier) => {
-    const hash = crypto.createHash('sha256').update(codeVerifier).digest('base64');
-    return hash.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-};
-
 router.post('/refresh', async (req, res) => {
     const { token } = req.body;
 
@@ -79,7 +74,7 @@ router.get('/discord/callback', (req, res, next) => {
         const refreshToken = generateRefreshToken(user._id);
 
         const redirectUrl = isMobile
-            ? `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+            ? `myapp://${process.env.BASE_REDIRECT_URL}success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
             : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
         console.log("Redirecting to:", redirectUrl);

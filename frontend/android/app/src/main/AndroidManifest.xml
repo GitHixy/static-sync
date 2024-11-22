@@ -59,11 +59,12 @@
       </intent-filter>
 
       <!-- Intenti per deep link -->
-<intent-filter android:autoVerify="true">
+<intent-filter android:autoVerify="true"
+    tools:ignore="AppLinkUrlError">
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="com.yourapp.staticSync" android:host="/success"/>
+    <data android:scheme="myapp" android:host="https://static-sync-7mzv.onrender.com" android:path="/success"/>
 </intent-filter>
     </activity>
   </application>
