@@ -64,7 +64,7 @@
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="myapp" android:host="https://static-sync-7mzv.onrender.com" android:path="/success"/>
+    <data android:scheme="myapp" android:host="static-sync-7mzv.onrender.com" android:path="/success"/>
 </intent-filter>
     </activity>
   </application>
