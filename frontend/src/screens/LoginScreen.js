@@ -51,17 +51,17 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleDiscordLogin = async () => {
-    try {
-        // Point to your backend endpoint that initiates the Discord login
-        const platform = 'mobile'; // Specify the platform
-        const discordLoginUrl = `${process.env.API_URL}/api/discord?platform=${platform}`;
+    const codeVerifier = generateCodeVerifier();
 
-        console.log('Opening Discord Login URL:', discordLoginUrl);
-        await Linking.openURL(discordLoginUrl);
-    } catch (error) {
-        console.error('Error opening Discord login:', error);
-    }
-};
+    
+    await AsyncStorage.setItem('codeVerifier', codeVerifier);
+
+    const baseUrl = `${apiUrl}/api/discord`;
+    const platformQuery = isMobile ? "?platform=mobile" : "";
+    const discordLoginUrl = `${baseUrl}${platformQuery}`;
+    console.log("Generated Discord Login URL:", discordLoginUrl);
+    Linking.openURL(discordLoginUrl);
+  };
   
 
   return (

@@ -79,7 +79,7 @@ router.get('/discord/callback', (req, res, next) => {
         const refreshToken = generateRefreshToken(user._id);
 
         const redirectUrl = isMobile
-            ? `myapp://oauth/discord?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+            ? `myapp:///success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
             : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
         console.log("Redirecting to:", redirectUrl);
