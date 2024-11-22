@@ -63,7 +63,7 @@
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="myapp" android:host="" android:path="/success" />
+    <data android:scheme="com.yourapp.staticSync" android:host="/success"/>
 </intent-filter>
     </activity>
   </application>
