@@ -6,6 +6,7 @@ import { loginUser } from '../services/authService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
+
 const apiUrl = Constants.expoConfig.extra.EXPO_API_URL ;
 
 
@@ -50,17 +51,17 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const handleDiscordLogin = async () => {
-    const codeVerifier = generateCodeVerifier();
+    try {
+        // Point to your backend endpoint that initiates the Discord login
+        const platform = 'mobile'; // Specify the platform
+        const discordLoginUrl = `${process.env.API_URL}/api/discord?platform=${platform}`;
 
-    
-    await AsyncStorage.setItem('codeVerifier', codeVerifier);
-
-    const baseUrl = `${apiUrl}/api/discord`;
-    const platformQuery = isMobile ? "?platform=mobile" : "";
-    const discordLoginUrl = `${baseUrl}${platformQuery}`;
-    console.log("Generated Discord Login URL:", discordLoginUrl);
-    Linking.openURL(discordLoginUrl);
-  };
+        console.log('Opening Discord Login URL:', discordLoginUrl);
+        await Linking.openURL(discordLoginUrl);
+    } catch (error) {
+        console.error('Error opening Discord login:', error);
+    }
+};
   
 
   return (

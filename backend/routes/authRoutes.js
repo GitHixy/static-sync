@@ -44,21 +44,19 @@ router.post('/refresh', async (req, res) => {
 
 
 router.get('/discord', (req, res, next) => {
-    const platform = req.query.platform || 'web'; 
+    const platform = req.query.platform || 'web';
 
+    // Generate PKCE code verifier and challenge
     const codeVerifier = crypto.randomBytes(32).toString('hex');
-    const codeChallenge = generateCodeChallenge(codeVerifier);
+    const codeChallenge = crypto
+        .createHash('sha256')
+        .update(codeVerifier)
+        .digest('base64url');
 
-    req.session.codeVerifier = codeVerifier;
+    const state = Buffer.from(JSON.stringify({ platform, codeChallenge })).toString('base64');
+    req.session.codeVerifier = codeVerifier; // Save codeVerifier in session for validation
 
-    const state = Buffer.from(
-        JSON.stringify({ platform, codeChallenge })
-    ).toString('base64');
-
-    passport.authenticate('discord', {
-        state,
-        session: false,
-    })(req, res, next);
+    passport.authenticate('discord', { state })(req, res, next);
 });
 
 
@@ -70,30 +68,18 @@ router.get('/discord/callback', (req, res, next) => {
     console.log("Decoded state:", state);
 
     const isMobile = state.platform === 'mobile';
-    const { codeChallenge } = state;
+    const { codeVerifier } = req.session;
 
     passport.authenticate('discord', async (err, user) => {
         if (err || !user) {
             return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=auth_failed`);
         }
 
-        const codeVerifier = req.session.codeVerifier;
-
-        if (!codeVerifier) {
-            return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=missing_code_verifier`);
-        }
-
-        const generatedChallenge = generateCodeChallenge(codeVerifier);
-
-        if (generatedChallenge !== codeChallenge) {
-            return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=invalid_code_challenge`);
-        }
-
         const accessToken = generateAccessToken(user._id, user.isAdmin);
         const refreshToken = generateRefreshToken(user._id);
 
         const redirectUrl = isMobile
-            ? `myapp://success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
+            ? `myapp://oauth/discord?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`
             : `${process.env.BASE_REDIRECT_URL}/success?auth=${accessToken}&refreshToken=${refreshToken}&id=${user._id}&username=${user.username}&discordId=${user.discord.id}`;
 
         console.log("Redirecting to:", redirectUrl);
