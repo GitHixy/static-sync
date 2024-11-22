@@ -1,9 +1,15 @@
 const express = require('express');
+const crypto = require('crypto');
 const passport = require('passport');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { generateRefreshToken, generateAccessToken } = require('../utils/generateToken');
+
+const generateCodeChallenge = (codeVerifier) => {
+    const hash = crypto.createHash('sha256').update(codeVerifier).digest('base64');
+    return hash.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
 
 router.post('/refresh', async (req, res) => {
     const { token } = req.body;
@@ -39,9 +45,20 @@ router.post('/refresh', async (req, res) => {
 
 router.get('/discord', (req, res, next) => {
     const platform = req.query.platform || 'web'; 
-    const state = Buffer.from(JSON.stringify({ platform })).toString('base64');
 
-    passport.authenticate('discord', { state })(req, res, next);
+    const codeVerifier = crypto.randomBytes(32).toString('hex');
+    const codeChallenge = generateCodeChallenge(codeVerifier);
+
+    req.session.codeVerifier = codeVerifier;
+
+    const state = Buffer.from(
+        JSON.stringify({ platform, codeChallenge })
+    ).toString('base64');
+
+    passport.authenticate('discord', {
+        state,
+        session: false,
+    })(req, res, next);
 });
 
 
@@ -53,9 +70,23 @@ router.get('/discord/callback', (req, res, next) => {
     console.log("Decoded state:", state);
 
     const isMobile = state.platform === 'mobile';
+    const { codeChallenge } = state;
+
     passport.authenticate('discord', async (err, user) => {
         if (err || !user) {
             return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=auth_failed`);
+        }
+
+        const codeVerifier = req.session.codeVerifier;
+
+        if (!codeVerifier) {
+            return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=missing_code_verifier`);
+        }
+
+        const generatedChallenge = generateCodeChallenge(codeVerifier);
+
+        if (generatedChallenge !== codeChallenge) {
+            return res.redirect(`${process.env.BASE_REDIRECT_URL}?error=invalid_code_challenge`);
         }
 
         const accessToken = generateAccessToken(user._id, user.isAdmin);

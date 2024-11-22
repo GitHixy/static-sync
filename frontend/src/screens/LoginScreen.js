@@ -16,6 +16,15 @@ const LoginScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const isMobile = Platform.OS === "ios" || Platform.OS === "android";
 
+  const generateCodeVerifier = () => {
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+    let verifier = '';
+    for (let i = 0; i < 128; i++) {
+        verifier += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return verifier;
+};
+
   useEffect(() => {
     const checkToken = async () => {
       const token = await AsyncStorage.getItem('token');
@@ -40,7 +49,12 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  const handleDiscordLogin = () => {
+  const handleDiscordLogin = async () => {
+    const codeVerifier = generateCodeVerifier();
+
+    
+    await AsyncStorage.setItem('codeVerifier', codeVerifier);
+
     const baseUrl = `${apiUrl}/api/discord`;
     const platformQuery = isMobile ? "?platform=mobile" : "";
     const discordLoginUrl = `${baseUrl}${platformQuery}`;

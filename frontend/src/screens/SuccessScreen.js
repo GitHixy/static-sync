@@ -20,6 +20,11 @@ const SuccessScreen = ({ navigation }) => {
 
     if (auth && refreshToken && id && username && discordId) {
       try {
+        const savedVerifier = await AsyncStorage.getItem('codeVerifier');
+        console.log("Code Verifier from Storage:", savedVerifier);
+
+        // Optional: Validate the PKCE flow if needed
+
         await AsyncStorage.setItem("token", auth);
         await AsyncStorage.setItem("refreshToken", refreshToken);
         await AsyncStorage.setItem("userId", id);
