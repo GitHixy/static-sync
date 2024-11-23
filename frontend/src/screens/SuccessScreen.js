@@ -9,12 +9,12 @@ const SuccessPage = ({ navigation }) => {
       try {
         let url;
 
-        // Distinzione tra web e mobile
+        
         if (typeof window !== "undefined" && window.location) {
           // Ambiente web
           url = window.location.href;
         } else {
-          // Ambiente mobile
+          
           const initialUrl = await Linking.getInitialURL();
           url = initialUrl;
         }
@@ -25,7 +25,7 @@ const SuccessPage = ({ navigation }) => {
           throw new Error("No URL received");
         }
 
-        const urlParams = new URLSearchParams(new URL(url).search); // Estrai i parametri
+        const urlParams = new URLSearchParams(new URL(url).search); 
         const auth = urlParams.get("auth");
         const refreshToken = urlParams.get("refreshToken");
         const id = urlParams.get("id");
@@ -57,12 +57,12 @@ const SuccessPage = ({ navigation }) => {
           navigation.replace("Home");
         } else {
           console.error("Invalid URL parameters");
-          Alert.alert("Error", "Authentication failed. Redirecting to login...");
+          
           navigation.replace("Login");
         }
       } catch (error) {
         console.error("Error during authentication process:", error);
-        Alert.alert("Error", "An unexpected error occurred. Redirecting to login...");
+        
         navigation.replace("Login");
       }
     };
