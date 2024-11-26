@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Static Sync",
-    "slug": "StaticSync",
-    "version": "1.0.0",
+    "slug": "frontend",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/StaticSync_BaseLogo.png",
     "extra": {
