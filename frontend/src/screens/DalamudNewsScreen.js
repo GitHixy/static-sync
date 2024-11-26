@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ImageBackground, FlatList, StyleSheet, ActivityIndicator, Linking } from 'react-native';
 
 import { fetchDalamudNews } from '../services/discordService';
 
@@ -23,13 +23,41 @@ const DalamudNewsScreen = () => {
     fetchNews();
   }, []);
 
+  const renderContentWithLinks = (content) => {
+    
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+  
+    
+    const parts = content.split(urlRegex);
+  
+    
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        
+        return (
+          <Text
+            key={index}
+            style={{ color: 'blue', textDecorationLine: 'underline' }}
+            onPress={() => Linking.openURL(part)}
+          >
+            {part}
+          </Text>
+        );
+      }
+      
+      return <Text key={index}>{part}</Text>;
+    });
+  };
+  
   const renderNewsItem = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.author}</Text>
-        <Text style={styles.description}>{item.content}</Text>
+        <Text style={styles.description}>
+          {renderContentWithLinks(item.content)}
+        </Text>
         <Text style={styles.date}>
-          {new Date(item.createdAt).toLocaleString()} 
+          {new Date(item.createdAt).toLocaleString()}
         </Text>
       </View>
     </View>
