@@ -16,7 +16,7 @@ The application is **under continuous development** to improve usability and int
 
 The APK file is available in the [APK directory](https://github.com/GitHixy/static-sync/tree/main/apk) of this repository.
 
-> *Publication on the Google Play Store is currently in progress.*
+> Google Play Stor e: https://play.google.com/store/apps/details?id=com.yourapp.staticSync
 
 ---
 
