@@ -14,6 +14,7 @@ import ManageStaticScreen from "../screens/ManageStaticScreen";
 import StaticDetailsScreen from "../screens/StaticDetailsScreen";
 import PluginsScreen from "../screens/PluginsScreen";
 import SuccessScreen from "../screens/SuccessScreen";
+import DalamudNewsScreen from "../screens/DalamudNewsScreen";
 
 export const navigationRef = React.createRef();
 
@@ -88,6 +89,19 @@ const AppNavigator = () => {
         <Stack.Screen
           name="News"
           component={NewsScreen}
+          options={{
+            headerStyle: {
+              backgroundColor: "#000",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontWeight: "bold",
+            },
+          }}
+        />
+                <Stack.Screen
+          name="Dalamud News"
+          component={DalamudNewsScreen}
           options={{
             headerStyle: {
               backgroundColor: "#000",

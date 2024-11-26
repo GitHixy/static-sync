@@ -30,6 +30,11 @@ const HomeScreen = ({ navigation }) => {
     <Text style={styles.menuText}>News</Text>
   </TouchableOpacity>
 
+  <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Dalamud News')}>
+    <FontAwesome name="newspaper-o" size={30} color="#fff" />
+    <Text style={styles.menuText}>Dalamud News</Text>
+  </TouchableOpacity>
+
   <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('Maintenance')}>
     <FontAwesome name="wrench" size={30} color="#fff" />
     <Text style={styles.menuText}>Maintenance</Text>
@@ -54,6 +59,8 @@ const HomeScreen = ({ navigation }) => {
     <FontAwesome name="puzzle-piece" size={30} color="#fff" />
     <Text style={styles.menuText}>Plugins</Text>
   </TouchableOpacity>
+
+
 </View>
 
 

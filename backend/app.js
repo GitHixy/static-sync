@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const {connectToDiscord} = require('./config/discordConfig');
 const passport = require('passport');
 const session = require('express-session');
 require('./config/passport');
@@ -14,12 +15,14 @@ const ffLogsRoutes = require('./routes/ffLogsRoutes');
 const lodestoneRoutes = require('./routes/lodestoneRoutes')
 const serverStatusRoutes = require('./routes/serverStatusRoutes');
 const pluginsRoutes = require('./routes/pluginsRoutes');
+const discordBotRoutes = require('./routes/discordBot');
 
 //Middleware
 const logger = require('./middleware/logger');
 
 dotenv.config();
 connectDB();
+connectToDiscord();
 
 const corsOptions = {
     origin: '*' ,
@@ -53,6 +56,7 @@ app.use('/api/fflogs', ffLogsRoutes);
 app.use('/api/lodestone', lodestoneRoutes);
 app.use('/api', serverStatusRoutes);
 app.use('/api', pluginsRoutes);
+app.use('/api', discordBotRoutes);
 
 
 const PORT = process.env.PORT;
